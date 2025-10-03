@@ -12,18 +12,20 @@
 
 
 <!-- Reduced font imports for mobile performance --></head>
-<body class="antialiased text-slate-100 bg-slate-950 h-full" style="font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, Apple Color Emoji, Segoe UI Emoji;">
+<body class="antialiased text-slate-100 bg-slate-950 min-h-screen w-full overflow-x-hidden" style="font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, Apple Color Emoji, Segoe UI Emoji;">
 
 <!-- React root div (hidden, not used) -->
 <div id="root" style="display: none;"></div>
 
-<!-- Background (component) added by Aura -->
-<div class="aura-background-component fixed top-0 w-full h-screen -z-10"><div data-us-project="OMO2zbNkRGUqAVYhB4jD" class="absolute top-0 left-0 -z-10 w-full h-full"></div>
-<script type="text/javascript">
-  !function(){if(!window.UnicornStudio){window.UnicornStudio={isInitialized:!1};var i=document.createElement("script");i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js",i.onload=function(){window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)},(document.head || document.body).appendChild(i)}}();
-</script></div>
+<!-- Responsive Background (component) added by Aura -->
+<div class="aura-background-component fixed inset-0 w-screen h-screen min-h-screen -z-10 overflow-hidden">
+    <div data-us-project="OMO2zbNkRGUqAVYhB4jD" class="absolute inset-0 w-full h-full min-w-full min-h-full object-cover"></div>
+    <script type="text/javascript">
+      !function(){if(!window.UnicornStudio){window.UnicornStudio={isInitialized:!1};var i=document.createElement("script");i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js",i.onload=function(){window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)},(document.head || document.body).appendChild(i)}}();
+    </script>
+</div>
 
-    <div class="relative isolate overflow-hidden">
+    <div class="relative isolate min-h-screen w-full overflow-hidden">
         <!-- Transparent Responsive Navigation Bar -->
         <header class="sticky top-0 z-50 bg-transparent backdrop-blur-sm">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -2407,6 +2409,48 @@
   .space-x-6 > * + * {
     margin-left: 0 !important;
     margin-top: 1.5rem !important;
+  }
+}
+
+/* Responsive Background Coverage */
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.aura-background-component {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  z-index: -10 !important;
+}
+
+.aura-background-component > div {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100vw !important;
+  min-height: 100vh !important;
+}
+
+/* Mobile viewport adjustments */
+@media (max-width: 768px) {
+  .aura-background-component {
+    height: 100svh !important;
+    min-height: 100svh !important;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .aura-background-component {
+    height: 100lvh !important;
+    min-height: 100lvh !important;
   }
 }
 
