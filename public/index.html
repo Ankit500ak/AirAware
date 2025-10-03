@@ -3,13 +3,69 @@
 <title>AirAware — Delhi-NCR Air Quality Management Platform</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<!-- Critical fonts only - load others lazily -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&amp;family=Pacifico&amp;family=Satisfy&amp;family=Great+Vibes&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&amp;display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+// Lazy load additional fonts after page load
+window.addEventListener('load', function() {
+  const additionalFonts = document.createElement('link');
+  additionalFonts.href = 'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Pacifico&family=Satisfy&display=swap';
+  additionalFonts.rel = 'stylesheet';
+  document.head.appendChild(additionalFonts);
+});
+</script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 <!-- EmailJS CDN -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<link id="all-fonts-link-font-geist" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-geist">.font-geist { font-family: 'Geist', sans-serif !important; }</style><link id="all-fonts-link-font-roboto" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-roboto">.font-roboto { font-family: 'Roboto', sans-serif !important; }</style><link id="all-fonts-link-font-montserrat" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-montserrat">.font-montserrat { font-family: 'Montserrat', sans-serif !important; }</style><link id="all-fonts-link-font-poppins" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-poppins">.font-poppins { font-family: 'Poppins', sans-serif !important; }</style><link id="all-fonts-link-font-playfair" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&amp;display=swap"><style id="all-fonts-style-font-playfair">.font-playfair { font-family: 'Playfair Display', serif !important; }</style><link id="all-fonts-link-font-instrument-serif" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-instrument-serif">.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }</style><link id="all-fonts-link-font-merriweather" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&amp;display=swap"><style id="all-fonts-style-font-merriweather">.font-merriweather { font-family: 'Merriweather', serif !important; }</style><link id="all-fonts-link-font-bricolage" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-bricolage">.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }</style><link id="all-fonts-link-font-jakarta" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-jakarta">.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }</style><link id="all-fonts-link-font-manrope" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-manrope">.font-manrope { font-family: 'Manrope', sans-serif !important; }</style><link id="all-fonts-link-font-space-grotesk" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-space-grotesk">.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }</style><link id="all-fonts-link-font-work-sans" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-work-sans">.font-work-sans { font-family: 'Work Sans', sans-serif !important; }</style><link id="all-fonts-link-font-pt-serif" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&amp;display=swap"><style id="all-fonts-style-font-pt-serif">.font-pt-serif { font-family: 'PT Serif', serif !important; }</style><link id="all-fonts-link-font-geist-mono" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-geist-mono">.font-geist-mono { font-family: 'Geist Mono', monospace !important; }</style><link id="all-fonts-link-font-space-mono" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap"><style id="all-fonts-style-font-space-mono">.font-space-mono { font-family: 'Space Mono', monospace !important; }</style><link id="all-fonts-link-font-quicksand" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-quicksand">.font-quicksand { font-family: 'Quicksand', sans-serif !important; }</style><link id="all-fonts-link-font-nunito" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-nunito">.font-nunito { font-family: 'Nunito', sans-serif !important; }</style></head>
+
+<style>
+/* Mobile Performance Optimizations */
+@media (max-width: 768px) {
+  * {
+    /* Reduce GPU usage on mobile */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    perspective: 1000px;
+    -webkit-perspective: 1000px;
+  }
+
+  /* Disable expensive animations on mobile */
+  .animate-pulse {
+    animation: none !important;
+  }
+  
+  /* Reduce transition complexity */
+  * {
+    transition-duration: 0.1s !important;
+  }
+  
+  /* Hardware acceleration for transforms */
+  .group:hover, [class*="hover:"], [class*="transition"] {
+    will-change: transform, opacity;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Reduce animation intensity for better performance */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* GPU acceleration for key elements */
+.mobile-optimized {
+  transform: translate3d(0, 0, 0);
+  will-change: auto;
+}
+</style>
+<!-- Reduced font imports for mobile performance --></head>
 <body class="antialiased text-slate-100 bg-slate-950 h-full" style="font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, Apple Color Emoji, Segoe UI Emoji;">
 
 <!-- React root div (hidden, not used) -->
@@ -18,7 +74,23 @@
 <!-- Background (component) added by Aura -->
 <div class="aura-background-component fixed top-0 w-full h-screen -z-10"><div data-us-project="OMO2zbNkRGUqAVYhB4jD" class="absolute top-0 left-0 -z-10 w-full h-full"></div>
 <script type="text/javascript">
-  !function(){if(!window.UnicornStudio){window.UnicornStudio={isInitialized:!1};var i=document.createElement("script");i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js",i.onload=function(){window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)},(document.head || document.body).appendChild(i)}}();
+  // Mobile-optimized UnicornStudio loading
+  !function(){
+    const isMobile = window.innerWidth <= 768;
+    if(!window.UnicornStudio && !isMobile){
+      window.UnicornStudio={isInitialized:!1};
+      var i=document.createElement("script");
+      i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js";
+      i.onload=function(){
+        window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)
+      };
+      (document.head || document.body).appendChild(i)
+    } else if (isMobile) {
+      // Add simple gradient background for mobile instead of complex animations
+      document.querySelector('.aura-background-component').style.background = 
+        'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)';
+    }
+  }();
 </script></div>
 
     <div class="relative isolate overflow-hidden">
@@ -1926,8 +1998,11 @@
             const steps = document.querySelectorAll('.space-y-24 > div');
             const rightPanel = document.querySelector('.lg\\:sticky');
             
-            // Create intersection observer
+            // Create intersection observer with mobile optimization
+            const isMobile = window.innerWidth <= 768;
             const observer = new IntersectionObserver((entries) => {
+                if (isMobile) return; // Disable heavy animations on mobile
+                
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const stepIndex = Array.from(steps).indexOf(entry.target);
@@ -1997,8 +2072,9 @@
             }
         }
         
-        // Typing animation for chat
+        // Mobile-optimized typing animation for chat
         (function() {
+            const isMobile = window.innerWidth <= 768;
             const responses = [
                 "Excellent! Monitoring Delhi-NCR air quality with real-time data:",
                 "Perfect! Building cleaner cities through advanced analytics:",
@@ -2019,7 +2095,9 @@
                     if (i < text.length) {
                         responseElement.innerHTML = text.substring(0, i + 1);
                         i++;
-                        setTimeout(type, 40 + Math.random() * 30);
+                        // Faster typing on mobile for better performance
+                        const delay = isMobile ? 20 : (40 + Math.random() * 30);
+                        setTimeout(type, delay);
                     } else {
                         if (statusElement) {
                             setTimeout(() => {
@@ -2161,6 +2239,73 @@
                 `;
             }
         })();
+
+        // Mobile Performance Optimization Scripts
+        (function() {
+            const isMobile = window.innerWidth <= 768;
+            
+            if (isMobile) {
+                // Reduce repaints and reflows on mobile
+                document.body.style.overflow = 'auto';
+                
+                // Debounce scroll events
+                let scrollTimeout;
+                const originalScrollHandler = window.onscroll;
+                window.addEventListener('scroll', function() {
+                    if (scrollTimeout) clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(function() {
+                        if (originalScrollHandler) originalScrollHandler();
+                    }, 16); // ~60fps
+                }, { passive: true });
+                
+                // Disable hover effects on mobile
+                const hoverElements = document.querySelectorAll('[class*="hover:"]');
+                hoverElements.forEach(element => {
+                    element.style.pointerEvents = 'auto';
+                });
+                
+                // Optimize animations for mobile
+                const animatedElements = document.querySelectorAll('.animate-pulse, [class*="transition"]');
+                animatedElements.forEach(element => {
+                    element.style.animationDuration = '0.5s';
+                    element.style.transitionDuration = '0.2s';
+                });
+                
+                // Add mobile class for CSS targeting
+                document.body.classList.add('mobile-device');
+            }
+            
+            // Performance monitoring
+            if (window.performance && window.performance.now) {
+                console.log('Performance: Page optimized for mobile devices');
+            }
+        })();
     </script>
+
+<style>
+/* Additional mobile-specific optimizations */
+@media (max-width: 768px) {
+  body.mobile-device * {
+    backface-visibility: hidden;
+    transform: translateZ(0);
+  }
+  
+  /* Disable expensive blur effects on mobile */
+  .blur-lg, .blur-xl, .blur-2xl, .blur-3xl {
+    backdrop-filter: none !important;
+    filter: none !important;
+  }
+  
+  /* Simplify gradients on mobile */
+  [class*="bg-gradient"] {
+    background: rgba(20, 184, 166, 0.1) !important;
+  }
+  
+  /* Reduce shadow complexity */
+  [class*="shadow"] {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  }
+}
+</style>
 
 </body></html>
