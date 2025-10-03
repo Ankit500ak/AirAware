@@ -2000,10 +2000,10 @@
         // Typing animation for chat
         (function() {
             const responses = [
-                "Perfect! I'll create a modern project management dashboard with:",
-                "Great choice! Building a comprehensive SaaS platform with:",
-                "Excellent! Designing a professional dashboard featuring:",
-                "Perfect fit! Creating an intuitive management interface with:"
+                "Excellent! Monitoring Delhi-NCR air quality with real-time data:",
+                "Perfect! Building cleaner cities through advanced analytics:",
+                "Great! Protecting public health with AI-powered insights:",
+                "Amazing! Creating sustainable environments with smart monitoring:"
             ];
             
             let currentResponseIndex = 0;
@@ -2023,14 +2023,14 @@
                     } else {
                         if (statusElement) {
                             setTimeout(() => {
-                                statusElement.textContent = 'Generation complete';
+                                statusElement.textContent = 'Analysis complete';
                                 setTimeout(callback, 2000);
                             }, 1000);
                         }
                     }
                 }
                 
-                if (statusElement) statusElement.textContent = 'Generating your app...';
+                if (statusElement) statusElement.textContent = 'Analyzing air quality data...';
                 setTimeout(type, 800);
             }
 
