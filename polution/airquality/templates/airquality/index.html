@@ -1,0 +1,3620 @@
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AirAware — Delhi-NCR Air Quality Management Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&amp;family=Pacifico&amp;family=Satisfy&amp;family=Great+Vibes&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<!-- EmailJS CDN -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+<!-- React and Dependencies for TSX Components -->
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/framer-motion@11/dist/framer-motion.js"></script>
+
+<!-- Reduced font imports for mobile performance --></head>
+<body class="antialiased text-slate-100 bg-slate-950 min-h-screen w-full overflow-x-hidden" style="font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, Apple Color Emoji, Segoe UI Emoji;">
+
+<!-- Navigation Functions - Must load first before any onclick handlers -->
+<script>
+// Navigation functions for authentication pages
+window.showLoginPage = function() {
+  window.location.href = '/login/';
+};
+
+window.showSignupPage = function() {
+  window.location.href = '/signup/';
+};
+
+window.hideSignupPage = function() {
+  // No longer needed with redirects
+};
+
+// CSRF Token Helper Function
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+</script>
+
+<!-- React root div (hidden, not used) -->
+<div id="root" style="display: none;"></div>
+
+<!-- Responsive Background (component) added by Aura -->
+<div class="aura-background-component fixed inset-0 w-screen h-screen min-h-screen -z-10 overflow-hidden">
+    <div data-us-project="OMO2zbNkRGUqAVYhB4jD" class="absolute inset-0 w-full h-full min-w-full min-h-full object-cover"></div>
+    <script type="text/javascript">
+      !function(){if(!window.UnicornStudio){window.UnicornStudio={isInitialized:!1};var i=document.createElement("script");i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js",i.onload=function(){window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)},(document.head || document.body).appendChild(i)}}();
+    </script>
+</div>
+
+    <div class="relative isolate min-h-screen w-full overflow-hidden">
+        <!-- Transparent Responsive Navigation Bar -->
+        <header class="sticky top-0 z-50 bg-transparent backdrop-blur-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16 lg:h-20">
+                    <!-- Brand Logo -->
+                    <div class="flex-shrink-0">
+                        <a href="/home" class="text-3xl text-white tracking-wide hover:text-teal-300 transition-colors duration-300 group" style="font-family: 'Great Vibes', 'Dancing Script', cursive; font-weight: 400; text-shadow: 0 0 15px rgba(20, 184, 166, 0.6); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">
+                            AirAware
+                        </a>
+                    </div>
+                    <!-- Desktop Navigation -->
+                    <nav class="hidden lg:flex lg:items-center lg:space-x-8">
+                        <div class="flex items-center space-x-1">
+                            <a href="/citizen-app" class="group flex items-center px-3 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-white/5 transition-all duration-200">
+                                <svg class="w-4 h-4 mr-2 text-teal-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                </svg>
+                                Citizen App
+                            </a>
+                            
+                            <a href="/policy-dashboard" class="group flex items-center px-3 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-white/5 transition-all duration-200">
+                                <svg class="w-4 h-4 mr-2 text-blue-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                                Policy Hub
+                            </a>
+                            
+                            <a href="/live-monitoring" class="group flex items-center px-3 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-white/5 transition-all duration-200">
+                                <svg class="w-4 h-4 mr-2 text-green-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                                Live Monitor
+                            </a>
+                            
+                            <a href="/health-routes" class="group flex items-center px-3 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-white/5 transition-all duration-200">
+                                <svg class="w-4 h-4 mr-2 text-purple-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+                                </svg>
+                                Safe Routes
+                            </a>
+                        </div>
+                        
+                        <!-- Desktop Right Side -->
+                        <div class="flex items-center space-x-4">
+                            <!-- Live AQI Badge -->
+                            <div class="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-red-500/20 to-orange-500/20 ring-1 ring-red-400/30 rounded-xl">
+                                <div class="w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>
+                                <span class="text-sm font-medium text-white">AQI 294</span>
+                                <span class="text-xs text-red-200/70">Severe</span>
+                            </div>
+                            
+                            <button onclick="showLoginPage()" class="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200">
+                                Sign In
+                            </button>
+                            <button onclick="showSignupPage()" class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-slate-900 bg-gradient-to-r from-teal-400 to-emerald-400 hover:from-teal-300 hover:to-emerald-300 rounded-lg transition-all duration-200 shadow-lg hover:shadow-teal-400/25 transform hover:scale-105">
+                                <span>Get Started</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </nav>
+                    
+                    <!-- Mobile Menu Controls -->
+                    <div class="lg:hidden flex items-center space-x-3">
+                        <!-- Mobile AQI Indicator -->
+                        <div class="flex items-center gap-1.5 px-3 py-2 bg-red-500/20 ring-1 ring-red-400/30 rounded-xl">
+                            <div class="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse"></div>
+                            <span class="text-xs font-bold text-red-300">294</span>
+                        </div>
+                        
+                        <!-- Enhanced Mobile Menu Button -->
+                        <button id="mobile-menu-btn" class="relative p-3 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 hover:from-white/20 hover:to-white/10 ring-1 ring-white/10 hover:ring-white/20 transition-all duration-300 shadow-lg backdrop-blur-sm group">
+                            <div class="hamburger-menu w-6 h-6 flex flex-col justify-center items-center space-y-1">
+                                <span class="hamburger-line block w-5 h-0.5 bg-white rounded-full transition-all duration-300 group-hover:w-6"></span>
+                                <span class="hamburger-line block w-5 h-0.5 bg-white rounded-full transition-all duration-300 group-hover:w-6"></span>
+                                <span class="hamburger-line block w-5 h-0.5 bg-white rounded-full transition-all duration-300 group-hover:w-6"></span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Dropdown Menu -->
+            <div id="mobile-menu" class="lg:hidden absolute top-full left-0 right-0 bg-slate-950/95 backdrop-blur-xl border-t border-white/10 shadow-2xl z-50 transform opacity-0 scale-95 invisible transition-all duration-300 ease-out">
+                <div class="max-w-7xl mx-auto px-4 py-6">
+                    <!-- Menu Header -->
+                    <div class="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
+                        <div>
+                            <h3 class="text-white font-bold text-lg">Navigation Menu</h3>
+                            <p class="text-slate-400 text-sm">Explore AirAware Platform</p>
+                        </div>
+                        <div class="flex items-center gap-2 px-3 py-1 bg-red-500/20 rounded-full ring-1 ring-red-400/30">
+                            <div class="w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>
+                            <span class="text-xs font-bold text-red-300">AQI 294 - Severe</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation Grid -->
+                    <div class="grid grid-cols-1 gap-3 mb-6">
+                        <a href="/citizen-app" class="group flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-white/5 to-transparent hover:from-teal-500/10 hover:to-teal-500/5 hover:ring-1 hover:ring-teal-400/20 transition-all duration-300">
+                            <div class="w-12 h-12 bg-gradient-to-br from-teal-400/20 to-teal-600/20 rounded-xl flex items-center justify-center ring-1 ring-teal-400/30 group-hover:scale-110 transition-transform">
+                                <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-white font-semibold text-lg group-hover:text-teal-100 transition-colors">Citizen App</div>
+                                <div class="text-slate-400 text-sm group-hover:text-teal-200/80 transition-colors">Personal AQI monitoring & health alerts for citizens</div>
+                            </div>
+                            <svg class="w-6 h-6 text-slate-500 group-hover:text-teal-400 transform group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                        
+                        <a href="/policy-dashboard" class="group flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-white/5 to-transparent hover:from-blue-500/10 hover:to-blue-500/5 hover:ring-1 hover:ring-blue-400/20 transition-all duration-300">
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-400/20 to-blue-600/20 rounded-xl flex items-center justify-center ring-1 ring-blue-400/30 group-hover:scale-110 transition-transform">
+                                <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-white font-semibold text-lg group-hover:text-blue-100 transition-colors">Policy Hub</div>
+                                <div class="text-slate-400 text-sm group-hover:text-blue-200/80 transition-colors">Government analytics & intervention management tools</div>
+                            </div>
+                            <svg class="w-6 h-6 text-slate-500 group-hover:text-blue-400 transform group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                        
+                        <a href="/live-monitoring" class="group flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-white/5 to-transparent hover:from-green-500/10 hover:to-green-500/5 hover:ring-1 hover:ring-green-400/20 transition-all duration-300">
+                            <div class="w-12 h-12 bg-gradient-to-br from-green-400/20 to-green-600/20 rounded-xl flex items-center justify-center ring-1 ring-green-400/30 group-hover:scale-110 transition-transform">
+                                <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-white font-semibold text-lg group-hover:text-green-100 transition-colors">Live Monitor</div>
+                                <div class="text-slate-400 text-sm group-hover:text-green-200/80 transition-colors">Real-time satellite & ground sensor data monitoring</div>
+                            </div>
+                            <svg class="w-6 h-6 text-slate-500 group-hover:text-green-400 transform group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                        
+                        <a href="/health-routes" class="group flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-white/5 to-transparent hover:from-purple-500/10 hover:to-purple-500/5 hover:ring-1 hover:ring-purple-400/20 transition-all duration-300">
+                            <div class="w-12 h-12 bg-gradient-to-br from-purple-400/20 to-purple-600/20 rounded-xl flex items-center justify-center ring-1 ring-purple-400/30 group-hover:scale-110 transition-transform">
+                                <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-white font-semibold text-lg group-hover:text-purple-100 transition-colors">Safe Routes</div>
+                                <div class="text-slate-400 text-sm group-hover:text-purple-200/80 transition-colors">AI-powered clean air navigation & route optimization</div>
+                            </div>
+                            <svg class="w-6 h-6 text-slate-500 group-hover:text-purple-400 transform group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button onclick="showLoginPage()" class="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 ring-1 ring-white/10 hover:ring-white/20 rounded-xl transition-all duration-200">
+                            <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            <span class="text-white font-medium">Sign In</span>
+                        </button>
+                        <button onclick="showSignupPage()" class="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 rounded-xl transition-all duration-200 shadow-lg hover:shadow-teal-500/25">
+                            <span class="text-white font-bold">Get Started Free</span>
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero -->
+        <section class="lg:pt-10 lg:pb-32 max-w-7xl mr-auto ml-auto pt-16 pr-6 pb-24 pl-6">
+            <div class="grid lg:grid-cols-12 gap-16 items-center">
+                <!-- Left: Copy -->
+                <div class="lg:col-span-7">
+                    <div class="opacity-0 blur-sm translate-y-8" style="animation: fadeSlideIn 0.8s ease-out 0.2s forwards;">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 text-xs font-medium text-teal-300 bg-teal-400/10 ring-1 ring-teal-400/20 rounded-full mb-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="wind" class="lucide lucide-wind h-3 w-3" style="stroke-width: 1.5px;"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"></path><path d="M9.6 4.6A2 2 0 1 1 11 8H2"></path><path d="M12.6 19.4A2 2 0 1 0 14 16H2"></path></svg>
+                            🚀 AI-Powered Environmental Intelligence Platform
+                        </div>
+                        
+                        <h1 class="text-5xl lg:text-7xl font-semibold text-white tracking-tight leading-[1.05] mb-6">
+                            Breathe Easy with<br>
+                            <span class="text-teal-400 bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">Smart Air Insights</span>
+                        </h1>
+                        
+                        <p class="text-xl text-slate-300 leading-relaxed max-w-2xl mb-8">
+                            Transform Delhi-NCR's air quality with our comprehensive monitoring ecosystem. From satellite imagery to ground sensors, we provide <strong class="text-white">real-time pollution source tracking</strong>, <strong class="text-white">personalized health recommendations</strong>, and <strong class="text-white">evidence-based policy tools</strong> for cleaner cities.
+                        </p>
+                        
+                        <div class="flex flex-col sm:flex-row gap-4 mb-12">
+                            <button class="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-slate-900 bg-gradient-to-r from-teal-400 to-emerald-400 hover:from-teal-300 hover:to-emerald-300 rounded-xl transition-all duration-300 shadow-lg hover:shadow-teal-400/25 transform hover:scale-105">
+                                🌍 Live Air Quality Map
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="map-pin" class="lucide lucide-map-pin ml-2 h-5 w-5" style="stroke-width: 1.5px;"><path d="M20 10c0 6-10 12-10 12s-10-6-10-12a10 10 0 0 1 20 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                            </button>
+                            <button class="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-slate-200 hover:text-white bg-white/5 hover:bg-white/10 ring-1 ring-white/20 hover:ring-white/30 rounded-xl transition-all duration-300">
+                                📊 Policy Analytics
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="bar-chart" class="lucide lucide-bar-chart ml-2 h-5 w-5" style="stroke-width: 1.5px;"><line x1="12" x2="12" y1="20" y2="10"></line><line x1="18" x2="18" y1="20" y2="4"></line><line x1="6" x2="6" y1="20" y2="16"></line></svg>
+                            </button>
+                        </div>
+                        
+                        <!-- Stats -->
+                        <div class="grid grid-cols-3 gap-8 pt-8 border-t border-white/10">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-white mb-1">200+</div>
+                                <div class="text-sm text-slate-400">🛰️ Satellite Data Points</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-white mb-1">24/7</div>
+                                <div class="text-sm text-slate-400">⚡ Real-time Processing</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-white mb-1">95%</div>
+                                <div class="text-sm text-slate-400">🎯 Prediction Accuracy</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Chat Interface -->
+                <div class="lg:col-span-5 opacity-0 blur-sm translate-x-8" style="animation: fadeSlideIn 0.8s ease-out 0.6s forwards;">
+                    <div class="relative">
+                        <!-- Chat card -->
+                        <div class="bg-black/40 backdrop-blur-xl ring-1 ring-white/10 rounded-2xl overflow-hidden shadow-2xl">
+                            <!-- Header -->
+                            <div class="flex items-center justify-between p-4 border-b border-white/10">
+                                <div class="flex items-center gap-3">
+                                    <div class="h-8 w-8 rounded-full bg-teal-400/20 flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="bot" class="lucide lucide-bot h-4 w-4 text-teal-400" style="stroke-width: 1.5px;"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-medium text-white">AirAware AI</div>
+                                        <div class="text-xs text-slate-400">🟢 Live Monitoring</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <div class="h-2 w-2 bg-green-400 rounded-full"></div>
+                                    <span class="text-xs text-slate-400">Active</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Messages -->
+                            <div class="p-4 space-y-4 h-80">
+                                <!-- User message -->
+                                <div class="flex justify-end">
+                                    <div class="bg-teal-400/20 ring-1 ring-teal-400/30 rounded-2xl rounded-br-md px-4 py-2 max-w-xs">
+                                        <p class="text-sm text-white">What's causing the high AQI in Delhi today?</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- AI typing indicator -->
+                                <div class="flex items-start gap-3">
+                                    <div class="h-6 w-6 rounded-full bg-teal-400/20 flex items-center justify-center flex-shrink-0 mt-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="bot" class="lucide lucide-bot h-3 w-3 text-teal-400" style="stroke-width: 1.5px;"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+                                    </div>
+                                    <div class="bg-white/5 ring-1 ring-white/10 rounded-2xl rounded-bl-md px-4 py-3 flex-1">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <div class="h-1 w-1 bg-teal-400 rounded-full animate-pulse"></div>
+                                            <span class="text-xs text-slate-400" id="typingStatus">Analyzing air quality data...</span>
+                                        </div>
+                                        <p class="text-sm text-white min-h-[60px]" id="aiResponse">🚨 <strong>Critical Alert:</strong> AQI 294 (Hazardous)<br><br>📍 <strong>Primary Contributors:</strong><br>• Stubble burning: 52% (↑15% vs yesterday)<br>• Vehicle emissions: 28%<br>• Industrial activity: 20%<br><br>💡 <strong>Recommendation:</strong> Avoid outdoor activities, use N95 masks, air purifiers recommended.</p>
+                                        
+                                        <!-- Progress indicators -->
+                                        <div class="mt-4 p-3 bg-black/30 rounded-lg border border-white/5">
+                                            <div class="text-xs text-slate-300 mb-2 font-medium">📡 Live Data Sources:</div>
+                                            <div class="space-y-1">
+                                                <div class="flex items-center justify-between text-xs">
+                                                    <span class="text-slate-300">🛰️ NASA MODIS Satellite</span>
+                                                    <span class="text-emerald-400">✓ Active</span>
+                                                </div>
+                                                <div class="flex items-center justify-between text-xs">
+                                                    <span class="text-slate-300">🏭 CPCB Ground Network</span>
+                                                    <span class="text-emerald-400">✓ 47 stations</span>
+                                                </div>
+                                                <div class="flex items-center justify-between text-xs">
+                                                    <span class="text-slate-300">📱 IoT Sensor Network</span>
+                                                    <span class="text-blue-400 animate-pulse">⚡ Processing</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Input -->
+                            <div class="p-4 border-t border-white/10">
+                                <div class="flex items-center gap-2 bg-white/5 ring-1 ring-white/10 rounded-xl p-3">
+                                    <input type="text" placeholder="💬 Ask me about pollution levels, health risks, or safe routes..." class="flex-1 bg-transparent text-sm text-white placeholder-slate-400 outline-none">
+                                    <button class="h-8 w-8 rounded-lg bg-teal-400 hover:bg-teal-300 flex items-center justify-center transition">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="send" class="lucide lucide-send h-4 w-4 text-slate-900" style="stroke-width: 1.5px;"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path><path d="m21.854 2.147-10.94 10.939"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Floating elements -->
+                        <div class="absolute -top-4 -right-4 h-12 w-12 rounded-xl bg-teal-400/20 ring-1 ring-teal-400/30 flex items-center justify-center backdrop-blur-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="zap" class="lucide lucide-zap h-5 w-5 text-teal-400" style="stroke-width: 1.5px;"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+                        </div>
+                        
+                        <div class="absolute -bottom-4 -left-4 h-10 w-10 rounded-lg bg-white/10 ring-1 ring-white/20 flex items-center justify-center backdrop-blur-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="code" class="lucide lucide-code h-4 w-4 text-slate-300" style="stroke-width: 1.5px;"><path d="m16 18 6-6-6-6"></path><path d="m8 6-6 6 6 6"></path></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Divider -->
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+    </div>
+
+    <!-- Features Section -->
+    <section class="max-w-7xl mr-auto ml-auto pt-24 pr-6 pb-24 pl-6">
+  <div class="text-center mb-16">
+    <div class="inline-flex items-center gap-2 px-3 py-1 text-xs font-medium text-teal-300 bg-teal-400/10 ring-1 ring-teal-400/20 rounded-full mb-6">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="wind" class="lucide lucide-wind h-3 w-3" style="stroke-width: 1.5px;"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"></path><path d="M9.6 4.6A2 2 0 1 1 11 8H2"></path><path d="M12.6 19.4A2 2 0 1 0 14 16H2"></path></svg>
+      Platform Features
+    </div>
+    <h2 class="text-4xl lg:text-5xl font-semibold text-white tracking-tight leading-tight mb-6">
+      Comprehensive solutions for
+      <span class="text-teal-400">cleaner air</span>
+    </h2>
+    <p class="text-xl text-slate-300 max-w-2xl mx-auto">
+      From real-time monitoring to policy recommendations - AirAware provides complete air quality management for Delhi-NCR region.
+    </p>
+  </div>
+
+  <div class="grid lg:grid-cols-3 gap-8 gap-x-8 gap-y-8">
+    <!-- Feature 1: Smart Code Generation -->
+    <div class="hover:ring-white/20 transition-all duration-300 bg-black/20 ring-white/10 ring-1 rounded-2xl p-8 backdrop-blur-sm relative overflow-hidden" style="background-image: radial-gradient(1200px 600px at 50% -10%, rgba(16,185,129,0.12), transparent 60%), radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 100% 100%, 22px 22px; background-position: center, center;">
+      <!-- Soft inner glow -->
+      <div class="absolute inset-0 pointer-events-none rounded-2xl" style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 0 80px rgba(16,185,129,0.06);"></div>
+      
+      <!-- Header -->
+      <div class="relative">
+        
+        <h3 class="text-xl font-semibold text-white mb-4">Source Identification</h3>
+        <p class="text-slate-300 leading-relaxed mb-6">
+          Track pollution sources using NASA MODIS satellites, ISRO data, CPCB monitors, and IoT sensors for precise pollution attribution.
+        </p>
+      </div>
+
+      <!-- Interactive preview -->
+      <div class="relative">
+        <div class="w-full rounded-xl bg-black/40 ring-1 ring-white/10 backdrop-blur-sm overflow-hidden">
+          <div class="px-4 py-3 border-b border-white/10">
+            <div class="flex items-center gap-2">
+              <div class="h-2 w-2 rounded-full bg-emerald-400"></div>
+              <span class="text-xs text-slate-300 font-medium">app.js</span>
+            </div>
+          </div>
+          <div class="p-4 space-y-2 text-xs font-mono">
+            <div class="text-emerald-300">// Real-time source identification</div>
+            <div class="text-slate-200">Sources: <span class="text-teal-400">Stubble (45%)</span></div>
+            <div class="text-slate-200">Vehicle: <span class="text-purple-400">30%</span> Industrial: <span class="text-yellow-400">25%</span></div>
+            <div class="text-slate-200">Status: <span class="text-red-400">Critical Alert</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 2: Beautiful UI Components -->
+    <div class="hover:ring-white/20 transition-all duration-300 bg-black/20 ring-white/10 ring-1 rounded-2xl p-8 backdrop-blur-sm relative overflow-hidden" style="background-image: radial-gradient(1200px 600px at 50% -10%, rgba(192,132,252,0.12), transparent 60%), radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 100% 100%, 22px 22px; background-position: center, center;">
+      <!-- Soft inner glow -->
+      <div class="absolute inset-0 pointer-events-none rounded-2xl" style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 0 80px rgba(192,132,252,0.06);"></div>
+      
+      <!-- Header -->
+      <div class="relative">
+        
+        <h3 class="text-xl font-semibold text-white mb-4">AI/ML Forecasting</h3>
+        <p class="text-slate-300 leading-relaxed mb-6">
+          Advanced machine learning models predict AQI trends 24-72 hours ahead with seasonal pattern recognition and meteorological data.
+        </p>
+      </div>
+
+      <!-- Interactive preview -->
+      <div class="relative">
+        <div class="space-y-3">
+          <div class="flex items-center gap-3 p-3 rounded-lg bg-white/5 ring-1 ring-white/10">
+            <div class="h-8 w-8 rounded bg-gradient-to-r from-purple-400 to-pink-400"></div>
+            <div class="flex-1">
+              <div class="h-2 w-20 rounded bg-white/20 mb-1"></div>
+              <div class="h-1.5 w-16 rounded bg-white/10"></div>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-lg bg-white/5 ring-1 ring-white/10">
+            <div class="h-8 w-8 rounded bg-gradient-to-r from-teal-400 to-blue-400"></div>
+            <div class="flex-1">
+              <div class="h-2 w-24 rounded bg-white/20 mb-1"></div>
+              <div class="h-1.5 w-20 rounded bg-white/10"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 3: Real-time Analytics -->
+    <div class="hover:ring-white/20 transition-all duration-300 bg-black/20 ring-white/10 ring-1 rounded-2xl p-8 backdrop-blur-sm relative overflow-hidden" style="background-image: radial-gradient(1200px 600px at 50% -10%, rgba(244,114,182,0.12), transparent 60%), radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 100% 100%, 22px 22px; background-position: center, center;">
+      <!-- Soft inner glow -->
+      <div class="absolute inset-0 pointer-events-none rounded-2xl" style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 0 80px rgba(244,114,182,0.06);"></div>
+      
+      <!-- Header -->
+      <div class="relative">
+        
+        <h3 class="text-xl font-semibold text-white mb-4">Citizen Mobile App</h3>
+        <p class="text-slate-300 leading-relaxed mb-6">
+          Hyperlocal AQI data, personalized health alerts based on individual conditions, and safe route suggestions for daily activities.
+        </p>
+      </div>
+
+      <!-- Interactive preview -->
+      <div class="relative">
+        <div class="w-full rounded-xl bg-black/40 ring-1 ring-white/10 backdrop-blur-sm p-4">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-sm text-white font-medium">Performance</span>
+            <div class="flex items-center gap-1">
+              <div class="h-2 w-2 rounded-full bg-emerald-400"></div>
+              <span class="text-xs text-emerald-400">Live</span>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-slate-300">Response Time</span>
+              <span class="text-xs text-white font-medium">147ms</span>
+            </div>
+            <div class="w-full h-1 rounded-full bg-white/10">
+              <div class="h-1 rounded-full bg-gradient-to-r from-emerald-400 w-3/4"></div>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-slate-300">Active Users</span>
+              <span class="text-xs text-white font-medium">2,847</span>
+            </div>
+            <div class="w-full h-1 rounded-full bg-white/10">
+              <div class="h-1 rounded-full bg-gradient-to-r from-pink-400 to-purple-400 w-5/6"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 4: Enterprise Security -->
+    <div class="hover:ring-white/20 transition-all duration-300 bg-black/20 ring-white/10 ring-1 rounded-2xl p-8 backdrop-blur-sm relative overflow-hidden" style="background-image: radial-gradient(1200px 600px at 50% -10%, rgba(52,211,153,0.12), transparent 60%), radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 100% 100%, 22px 22px; background-position: center, center;">
+      <!-- Soft inner glow -->
+      <div class="absolute inset-0 pointer-events-none rounded-2xl" style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 0 80px rgba(52,211,153,0.06);"></div>
+      
+      <!-- Header -->
+      <div class="relative">
+        
+        <h3 class="text-xl font-semibold text-white mb-4">Policy Dashboard</h3>
+        <p class="text-slate-300 leading-relaxed mb-6">
+          Real-time analytics for policymakers showing source contribution breakdown and intervention effectiveness tracking.
+        </p>
+      </div>
+
+      <!-- Interactive preview -->
+      <div class="relative">
+        <div class="w-full rounded-xl bg-black/40 ring-1 ring-white/10 backdrop-blur-sm p-4">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-white font-medium">Security Status</span>
+              <div class="flex items-center gap-1">
+                <div class="h-2 w-2 rounded-full bg-emerald-400"></div>
+                <span class="text-xs text-emerald-400">Protected</span>
+              </div>
+            </div>
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400"><path d="M20 6 9 17l-5-5"></path></svg>
+                  <span class="text-xs text-slate-300">Stubble Burning</span>
+                </div>
+                <span class="text-xs text-orange-400">45%</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-400"><path d="M20 6 9 17l-5-5"></path></svg>
+                  <span class="text-xs text-slate-300">Vehicle Emissions</span>
+                </div>
+                <span class="text-xs text-red-400">30%</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-400"><path d="M20 6 9 17l-5-5"></path></svg>
+                  <span class="text-xs text-slate-300">Industrial Activity</span>
+                </div>
+                <span class="text-xs text-yellow-400">25%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 5: Version Control -->
+    <div class="hover:ring-white/20 transition-all duration-300 bg-black/20 ring-white/10 ring-1 rounded-2xl p-8 backdrop-blur-sm relative overflow-hidden" style="background-image: radial-gradient(1200px 600px at 50% -10%, rgba(96,165,250,0.12), transparent 60%), radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 100% 100%, 22px 22px; background-position: center, center;">
+      <!-- Soft inner glow -->
+      <div class="absolute inset-0 pointer-events-none rounded-2xl" style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 0 80px rgba(96,165,250,0.06);"></div>
+      
+      <!-- Header -->
+      <div class="relative">
+        
+        <h3 class="text-xl font-semibold text-white mb-4">Health Alerts</h3>
+        <p class="text-slate-300 leading-relaxed mb-6">
+          Personalized notifications based on individual health conditions, activity levels, and real-time AQI data for proactive health protection.
+        </p>
+      </div>
+
+      <!-- Interactive preview -->
+      <div class="relative">
+        <div class="w-full rounded-xl bg-black/40 ring-1 ring-white/10 backdrop-blur-sm p-4">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-sm text-white font-medium">Git Repository</span>
+            <div class="flex items-center gap-1">
+              <div class="h-2 w-2 rounded-full bg-blue-400"></div>
+              <span class="text-xs text-blue-400">main</span>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div class="flex items-start gap-3">
+              <div class="h-2 w-2 rounded-full bg-blue-400 mt-1.5"></div>
+              <div class="flex-1">
+                <div class="text-xs text-white font-medium">feat: Add user dashboard</div>
+                <div class="text-xs text-slate-400">2 minutes ago</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="h-2 w-2 rounded-full bg-emerald-400 mt-1.5"></div>
+              <div class="flex-1">
+                <div class="text-xs text-white font-medium">fix: Update API endpoints</div>
+                <div class="text-xs text-slate-400">15 minutes ago</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="h-2 w-2 rounded-full bg-purple-400 mt-1.5"></div>
+              <div class="flex-1">
+                <div class="text-xs text-white font-medium">docs: Update README</div>
+                <div class="text-xs text-slate-400">1 hour ago</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 6: One-Click Deploy -->
+    <div class="hover:ring-white/20 transition-all duration-300 bg-black/20 ring-white/10 ring-1 rounded-2xl p-8 backdrop-blur-sm relative overflow-hidden" style="background-image: radial-gradient(1200px 600px at 50% -10%, rgba(45,212,191,0.12), transparent 60%), radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 100% 100%, 22px 22px; background-position: center, center;">
+      <!-- Soft inner glow -->
+      <div class="absolute inset-0 pointer-events-none rounded-2xl" style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 0 80px rgba(45,212,191,0.06);"></div>
+      
+      <!-- Header -->
+      <div class="relative">
+        
+        <h3 class="text-xl font-semibold text-white mb-4">Smart Routing</h3>
+        <p class="text-slate-300 leading-relaxed mb-6">
+          AI-powered route optimization suggesting less polluted paths for daily commutes, jogging routes, and outdoor activities.
+        </p>
+      </div>
+
+      <!-- Interactive preview -->
+      <div class="relative">
+        <div class="w-full rounded-xl bg-black/40 ring-1 ring-white/10 backdrop-blur-sm p-4">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-sm text-white font-medium">Deployment</span>
+            <div class="flex items-center gap-1">
+              <div class="h-2 w-2 rounded-full bg-teal-400 animate-pulse"></div>
+              <span class="text-xs text-teal-400">Live</span>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-400"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span class="text-xs text-slate-300">Build Status</span>
+              </div>
+              <span class="text-xs text-teal-400">Complete</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-400"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span class="text-xs text-slate-300">SSL Certificate</span>
+              </div>
+              <span class="text-xs text-teal-400">Active</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-400"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span class="text-xs text-slate-300">CDN Distribution</span>
+              </div>
+              <span class="text-xs text-teal-400">Global</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- Divider -->
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+    </div>
+
+    <!-- Testimonials -->
+    
+
+    <!-- Divider -->
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+    </div>
+
+    <!-- How It Works Section with Sticky Scroll -->
+    <section class="max-w-7xl mr-auto ml-auto pt-24 pr-6 pb-24 pl-6">
+  <div class="grid lg:grid-cols-12 gap-20">
+  <!-- Left: How it works steps (Scrollable) -->
+  <div class="lg:col-span-5">
+    <!-- Header Section -->
+    <div class="mb-16">
+      <div class="inline-flex items-center gap-2 px-3 py-1 text-xs font-medium text-teal-300 bg-teal-400/10 ring-1 ring-teal-400/20 rounded-full mb-8">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="workflow" class="lucide lucide-workflow h-3 w-3" style="stroke-width: 1.5px;"><rect width="8" height="8" x="3" y="3" rx="2"></rect><path d="M7 11v4a2 2 0 0 0 2 2h4"></path><rect width="8" height="8" x="13" y="13" rx="2"></rect></svg>
+        How it works
+      </div>
+
+      <h2 class="text-4xl lg:text-5xl font-semibold text-white tracking-tight leading-tight mb-6">
+        Your Air. Your Health.
+        <span class="text-teal-400">Your Right</span>
+      </h2>
+
+      <p class="text-xl text-slate-300 leading-relaxed">
+        Smart sensors. Smarter insights. Cleaner air for everyone. 🌱
+      </p>
+    </div>
+
+    <!-- Scrollable Steps Section -->
+    <div class="space-y-16">
+      <!-- Step 1 -->
+      <div class="group relative p-6 rounded-2xl bg-gradient-to-br from-teal-500/8 via-teal-400/4 to-transparent border border-teal-400/15 hover:border-teal-400/30 transition-all duration-500 hover:shadow-xl hover:shadow-teal-400/10 hover:-translate-y-1 min-h-[60vh] flex items-center">
+        <div class="flex items-start gap-8">
+          <div class="relative flex-shrink-0">
+            <div class="h-14 w-14 rounded-xl bg-gradient-to-br from-teal-400/25 to-teal-600/15 ring-2 ring-teal-400/30 flex items-center justify-center shadow-lg shadow-teal-400/20 group-hover:shadow-xl group-hover:shadow-teal-400/30 transition-all duration-500 group-hover:scale-105">
+              <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-teal-300/15 to-transparent animate-pulse"></div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="satellite" class="lucide lucide-satellite h-6 w-6 text-teal-300 relative z-10" style="stroke-width: 1.5px;"><path d="M13 7 9 3 5 7l4 4"></path><path d="m17 11 4 4-4 4-4-4"></path><path d="m8 12 4 4 6-6-4-4Z"></path><path d="m16 8 3-3"></path><path d="M9 21a6 6 0 0 0-6-6"></path></svg>
+            </div>
+            <div class="absolute left-1/2 -translate-x-0.5 top-14 w-px h-8 bg-gradient-to-b from-teal-400/50 via-teal-400/30 to-teal-400/10"></div>
+            <div class="absolute -top-2 -right-2 w-3 h-3 bg-teal-400 rounded-full animate-bounce opacity-60" style="animation-delay: 0.5s;"></div>
+          </div>
+          
+          <div class="flex-1 pt-2">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex-1">
+                <h3 class="text-xl font-bold text-white tracking-tight mb-2 group-hover:text-teal-100 transition-colors">
+                  <span class="text-xl mr-2">🛰️</span>
+                  Multi-Source Data Collection
+                </h3>
+                <div class="flex flex-wrap items-center gap-1 mb-3">
+                  <span class="text-xs px-2 py-0.5 bg-teal-400/15 text-teal-300 rounded-full font-medium border border-teal-400/25">Real-time</span>
+                  <span class="text-xs px-2 py-0.5 bg-blue-400/15 text-blue-300 rounded-full font-medium border border-blue-400/25">24/7</span>
+                  <span class="text-xs px-2 py-0.5 bg-emerald-400/15 text-emerald-300 rounded-full font-medium border border-emerald-400/25">Multi-Source</span>
+                </div>
+              </div>
+              <span class="inline-flex items-center px-4 py-2 text-lg font-bold text-teal-300 bg-teal-400/15 ring-2 ring-teal-400/30 rounded-xl shadow-lg">01</span>
+            </div>
+            
+            <div class="bg-black/15 rounded-lg p-3 border border-teal-400/10">
+              <p class="text-slate-200 text-sm leading-relaxed mb-3">
+                <span class="font-semibold text-white">Satellites, ground monitors, and IoT sensors</span> working 24/7 across Delhi-NCR. <span class="text-teal-300 font-medium">Always fresh data, always accurate.</span>
+              </p>
+              
+              <div class="grid grid-cols-3 gap-1">
+                <div class="text-center p-1.5 rounded bg-teal-400/10">
+                  <div class="text-xs text-teal-300 font-medium">NASA MODIS</div>
+                </div>
+                <div class="text-center p-1.5 rounded bg-blue-400/10">
+                  <div class="text-xs text-blue-300 font-medium">CPCB Network</div>
+                </div>
+                <div class="text-center p-1.5 rounded bg-purple-400/10">
+                  <div class="text-xs text-purple-300 font-medium">IoT Sensors</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="group relative p-6 rounded-2xl bg-gradient-to-br from-purple-500/8 via-blue-400/4 to-transparent border border-purple-400/15 hover:border-purple-400/30 transition-all duration-500 hover:shadow-xl hover:shadow-purple-400/10 hover:-translate-y-1 min-h-[60vh] flex items-center">
+        <div class="flex items-start gap-8">
+          <div class="relative flex-shrink-0">
+            <div class="h-14 w-14 rounded-xl bg-gradient-to-br from-purple-400/25 to-blue-600/15 ring-2 ring-purple-400/30 flex items-center justify-center shadow-lg shadow-purple-400/20 group-hover:shadow-xl group-hover:shadow-purple-400/30 transition-all duration-500 group-hover:scale-105">
+              <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-purple-300/15 to-transparent animate-pulse" style="animation-delay: 0.3s;"></div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="brain-circuit" class="lucide lucide-brain-circuit h-6 w-6 text-purple-300 relative z-10" style="stroke-width: 1.5px;"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path><path d="M9 13a4.5 4.5 0 0 0 3-4"></path><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path><path d="M3.477 10.896a4 4 0 0 1 .585-.396"></path><path d="M6 18a4 4 0 0 1-1.967-.516"></path><path d="M12 13h4"></path><path d="M12 18h6a2 2 0 0 1 2 2v1"></path><path d="M12 8h8"></path><path d="M16 8V5a2 2 0 0 1 2-2"></path><circle cx="16" cy="13" r=".5"></circle><circle cx="18" cy="3" r=".5"></circle><circle cx="20" cy="21" r=".5"></circle><circle cx="20" cy="8" r=".5"></circle></svg>
+            </div>
+            <div class="absolute left-1/2 -translate-x-0.5 top-14 w-px h-8 bg-gradient-to-b from-purple-400/50 via-purple-400/30 to-purple-400/10"></div>
+            <!-- AI processing indicators -->
+            <div class="absolute -top-1 -right-2 flex space-x-1">
+              <div class="w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse"></div>
+              <div class="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse" style="animation-delay: 0.2s;"></div>
+              <div class="w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse" style="animation-delay: 0.4s;"></div>
+            </div>
+          </div>
+          
+          <div class="flex-1 pt-2">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex-1">
+                <h3 class="text-xl font-bold text-white tracking-tight mb-2 group-hover:text-purple-100 transition-colors">
+                  <span class="text-xl mr-2">🤖</span>
+                  AI-Powered Source Analysis
+                </h3>
+                <div class="flex flex-wrap items-center gap-1 mb-3">
+                  <span class="text-xs px-2 py-0.5 bg-purple-400/15 text-purple-300 rounded-full font-medium border border-purple-400/25">95% Accurate</span>
+                  <span class="text-xs px-2 py-0.5 bg-orange-400/15 text-orange-300 rounded-full font-medium border border-orange-400/25">72hr Forecast</span>
+                  <span class="text-xs px-2 py-0.5 bg-blue-400/15 text-blue-300 rounded-full font-medium border border-blue-400/25">ML Powered</span>
+                </div>
+              </div>
+              <span class="inline-flex items-center px-3 py-1 text-sm font-bold text-purple-300 bg-purple-400/15 ring-1 ring-purple-400/30 rounded-lg">02</span>
+            </div>
+            
+            <div class="bg-black/15 rounded-lg p-3 border border-purple-400/10">
+              <p class="text-slate-200 text-sm leading-relaxed mb-3">
+                <span class="font-semibold text-white">AI identifies pollution sources</span> and predicts AQI trends with <span class="text-purple-300 font-bold">95% accuracy</span>. <span class="text-blue-300 font-medium">Know what's coming, not just what's here.</span>
+              </p>
+              
+              <div class="grid grid-cols-3 gap-1">
+                <div class="text-center p-1.5 rounded bg-red-400/10">
+                  <div class="text-xs text-red-300 font-medium">Stubble Burning</div>
+                </div>
+                <div class="text-center p-1.5 rounded bg-orange-400/10">
+                  <div class="text-xs text-orange-300 font-medium">Vehicle Emissions</div>
+                </div>
+                <div class="text-center p-1.5 rounded bg-yellow-400/10">
+                  <div class="text-xs text-yellow-300 font-medium">Industrial</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="group relative p-6 rounded-2xl bg-gradient-to-br from-emerald-500/8 via-green-400/4 to-transparent border border-emerald-400/15 hover:border-emerald-400/30 transition-all duration-500 hover:shadow-xl hover:shadow-emerald-400/10 hover:-translate-y-1 min-h-[60vh] flex items-center">
+        <div class="flex items-start gap-8">
+          <div class="relative flex-shrink-0">
+            <div class="h-14 w-14 rounded-xl bg-gradient-to-br from-emerald-400/25 to-green-600/15 ring-2 ring-emerald-400/30 flex items-center justify-center shadow-lg shadow-emerald-400/20 group-hover:shadow-xl group-hover:shadow-emerald-400/30 transition-all duration-500 group-hover:scale-105">
+              <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-emerald-300/15 to-transparent animate-pulse" style="animation-delay: 0.6s;"></div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="smartphone" class="lucide lucide-smartphone h-6 w-6 text-emerald-300 relative z-10" style="stroke-width: 1.5px;"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect><path d="M12 18h.01"></path></svg>
+            </div>
+            <!-- Notification indicators -->
+            <div class="absolute -top-2 -right-1 w-4 h-4 bg-red-400 rounded-full flex items-center justify-center">
+              <div class="w-2 h-2 bg-white rounded-full animate-ping"></div>
+            </div>
+            <div class="absolute -bottom-2 -left-2 w-3 h-3 bg-emerald-400 rounded-full animate-bounce" style="animation-delay: 0.8s;"></div>
+          </div>
+          
+          <div class="flex-1 pt-2">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex-1">
+                <h3 class="text-xl font-bold text-white tracking-tight mb-2 group-hover:text-emerald-100 transition-colors">
+                  <span class="text-xl mr-2">📱</span>
+                  Personalized Action Delivery
+                </h3>
+                <div class="flex flex-wrap items-center gap-1 mb-3">
+                  <span class="text-xs px-2 py-0.5 bg-emerald-400/15 text-emerald-300 rounded-full font-medium border border-emerald-400/25">Smart Alerts</span>
+                  <span class="text-xs px-2 py-0.5 bg-green-400/15 text-green-300 rounded-full font-medium border border-green-400/25">Safe Routes</span>
+                  <span class="text-xs px-2 py-0.5 bg-blue-400/15 text-blue-300 rounded-full font-medium border border-blue-400/25">Policy Tools</span>
+                </div>
+              </div>
+              <span class="inline-flex items-center px-3 py-1 text-sm font-bold text-emerald-300 bg-emerald-400/15 ring-1 ring-emerald-400/30 rounded-lg">03</span>
+            </div>
+            
+            <div class="bg-black/15 rounded-lg p-3 border border-emerald-400/10">
+              <p class="text-slate-200 text-sm leading-relaxed mb-3">
+                <span class="font-semibold text-white">Personal health alerts and safe routes</span> for citizens. <span class="text-emerald-300 font-medium">Policy insights and intervention tools</span> for decision-makers.
+              </p>
+              
+              <div class="grid grid-cols-2 gap-2">
+                <div class="p-2 rounded bg-emerald-400/10 border border-emerald-400/20">
+                  <div class="text-xs text-emerald-300 font-medium mb-0.5">👥 Citizens</div>
+                  <div class="text-xs text-slate-300">Health alerts • Safe routes</div>
+                </div>
+                <div class="p-2 rounded bg-blue-400/10 border border-blue-400/20">
+                  <div class="text-xs text-blue-300 font-medium mb-0.5">🏢 Policymakers</div>
+                  <div class="text-xs text-slate-300">Data insights • Intervention tools</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Technical Deep Dive Sections -->
+      <div class="space-y-12 mt-20">
+        <!-- Data Architecture -->
+        <div class="group relative p-6 rounded-2xl bg-gradient-to-br from-blue-500/5 via-indigo-400/3 to-transparent border border-blue-400/10 hover:border-blue-400/20 transition-all duration-300">
+          <div class="flex items-start gap-6">
+            <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-400/20 to-indigo-600/10 ring-1 ring-blue-400/30 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-300"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="7.5,4.21 12,6.81 16.5,4.21"></polyline><polyline points="7.5,19.79 7.5,14.6 3,12"></polyline><polyline points="21,12 16.5,14.6 16.5,19.79"></polyline></svg>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold text-white mb-2">📊 Data Architecture & Processing</h3>
+              <p class="text-slate-300 text-sm mb-3">Multi-layered data pipeline processing 10TB+ daily from satellite imagery, ground sensors, and IoT networks across 28 districts.</p>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="p-2 bg-blue-400/10 rounded border border-blue-400/20">
+                  <span class="text-blue-300 font-medium">Data Sources:</span> 200+ satellites, 1500+ ground stations
+                </div>
+                <div class="p-2 bg-indigo-400/10 rounded border border-indigo-400/20">
+                  <span class="text-indigo-300 font-medium">Processing:</span> Real-time ETL, 15-min refresh cycles
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ML Models -->
+        <div class="group relative p-6 rounded-2xl bg-gradient-to-br from-purple-500/5 via-pink-400/3 to-transparent border border-purple-400/10 hover:border-purple-400/20 transition-all duration-300">
+          <div class="flex items-start gap-6">
+            <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-purple-400/20 to-pink-600/10 ring-1 ring-purple-400/30 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-300"><path d="M9 12l2 2 4-4"></path><path d="M21 12c.552 0 1-.448 1-1V9a2 2 0 0 0-2-2h-1V5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H6a2 2 0 0 0-2 2v2c0 .552.448 1 1 1"></path></svg>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold text-white mb-2">🧠 Machine Learning Models</h3>
+              <p class="text-slate-300 text-sm mb-3">Advanced ensemble models combining CNN, LSTM, and transformer architectures for pollution source identification and AQI prediction.</p>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="p-2 bg-purple-400/10 rounded border border-purple-400/20">
+                  <span class="text-purple-300 font-medium">Models:</span> ResNet-50, LSTM, GPT-based transformers
+                </div>
+                <div class="p-2 bg-pink-400/10 rounded border border-pink-400/20">
+                  <span class="text-pink-300 font-medium">Accuracy:</span> 95.3% source detection, 92.1% 72h forecast
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Policy Framework -->
+        <div class="group relative p-6 rounded-2xl bg-gradient-to-br from-emerald-500/5 via-green-400/3 to-transparent border border-emerald-400/10 hover:border-emerald-400/20 transition-all duration-300">
+          <div class="flex items-start gap-6">
+            <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-400/20 to-green-600/10 ring-1 ring-emerald-400/30 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-300"><path d="M14 9V5a3 3 0 0 0-6 0v4"></path><rect x="2" y="9" width="20" height="11" rx="2" ry="2"></rect></svg>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold text-white mb-2">🏛️ Policy Integration Framework</h3>
+              <p class="text-slate-300 text-sm mb-3">Direct integration with government systems enabling real-time policy enforcement, automated alerts, and evidence-based intervention strategies.</p>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="p-2 bg-emerald-400/10 rounded border border-emerald-400/20">
+                  <span class="text-emerald-300 font-medium">Integration:</span> CPCB, Delhi Pollution Board APIs
+                </div>
+                <div class="p-2 bg-green-400/10 rounded border border-green-400/20">
+                  <span class="text-green-300 font-medium">Impact:</span> 40% faster response, automated enforcement
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Public Health Interface -->
+        <div class="group relative p-6 rounded-2xl bg-gradient-to-br from-orange-500/5 via-red-400/3 to-transparent border border-orange-400/10 hover:border-orange-400/20 transition-all duration-300">
+          <div class="flex items-start gap-6">
+            <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-orange-400/20 to-red-600/10 ring-1 ring-orange-400/30 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-300"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5Z"></path></svg>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold text-white mb-2">❤️ Public Health Intelligence</h3>
+              <p class="text-slate-300 text-sm mb-3">Personalized health recommendations based on individual health profiles, location data, and real-time pollution exposure calculations.</p>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="p-2 bg-orange-400/10 rounded border border-orange-400/20">
+                  <span class="text-orange-300 font-medium">Users:</span> 2M+ active users, 500K+ daily alerts
+                </div>
+                <div class="p-2 bg-red-400/10 rounded border border-red-400/20">
+                  <span class="text-red-300 font-medium">Health Impact:</span> 25% reduction in pollution exposure
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Product mockup (Sticky) -->
+  <div class="lg:col-span-7">
+    <div class="lg:sticky lg:top-24 relative">
+      <!-- Soft glow -->
+      <div class="absolute inset-0 -m-8 pointer-events-none rounded-3xl blur-sm" style="background: radial-gradient(60% 50% at 70% 30%, rgba(45,212,191,0.12), transparent 60%);"></div>
+
+      <div class="bg-black/40 backdrop-blur-xl ring-1 ring-white/10 rounded-2xl overflow-hidden shadow-2xl relative transition-all duration-700 hover:shadow-teal-400/20">
+        <!-- Header -->
+        <div class="flex items-center justify-between p-4 border-b border-white/10">
+          <div class="flex items-center gap-3">
+            <div class="h-3 w-3 rounded-full bg-teal-400"></div>
+            <span class="text-sm text-white font-medium">AirAware Command Center</span>
+          </div>
+          <div class="flex items-center gap-2 text-slate-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="settings" class="lucide lucide-settings h-4 w-4"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sidebar" class="lucide lucide-sidebar h-4 w-4"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 3v18"></path></svg>
+          </div>
+        </div>
+
+        <!-- Top actions -->
+        <div class="grid md:grid-cols-2 gap-4 p-6">
+          <button class="group w-full text-left bg-white/5 hover:bg-white/10 ring-1 ring-white/10 rounded-xl p-4 transition-all duration-200">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-lg bg-teal-400/20 ring-1 ring-teal-400/30 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sparkles" class="lucide lucide-sparkles h-4 w-4 text-teal-400"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
+                </div>
+                <div class="">
+                  <div class="text-sm font-medium text-white">Deploy Monitoring Station</div>
+                  <div class="text-xs text-slate-400">Add new IoT sensors & data feeds</div>
+                </div>
+              </div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" class="lucide lucide-arrow-right h-4 w-4 text-slate-400 group-hover:text-white transition-colors"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+            </div>
+          </button>
+
+          <div class="w-full bg-white/5 ring-1 ring-white/10 rounded-xl p-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-lg bg-white/10 ring-1 ring-white/10 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="layout-dashboard" class="lucide lucide-layout-dashboard h-4 w-4 text-slate-300"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rect></svg>
+                </div>
+                <div class="flex-1">
+                  <div class="text-sm font-medium text-white">Policy Templates</div>
+                  <div class="text-xs text-slate-400">Odd-Even, Construction Ban, Emergency</div>
+                </div>
+              </div>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-300 ring-1 ring-orange-400/20">Active</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Analytics -->
+        <div class="px-6 py-4 border-t border-white/10">
+          <div class="flex items-center justify-between mb-6">
+            <span class="text-base font-medium text-white">Analytics</span>
+            <div class="flex items-center gap-2 text-xs text-slate-400">
+              <span>Last 7 days</span>
+              <span class="h-1 w-1 rounded-full bg-teal-400"></span>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-3 gap-4 mb-6">
+            <div class="bg-white/5 ring-1 ring-white/10 rounded-lg p-4">
+              <div class="text-xs text-slate-400 mb-2">🌡️ Current AQI</div>
+              <div class="text-2xl font-semibold text-red-400 mb-1">294</div>
+              <div class="text-xs text-red-400">Hazardous</div>
+            </div>
+            <div class="bg-white/5 ring-1 ring-white/10 rounded-lg p-4">
+              <div class="text-xs text-slate-400 mb-2">📊 Stations Online</div>
+              <div class="text-2xl font-semibold text-emerald-400 mb-1">47/50</div>
+              <div class="text-xs text-emerald-400">94% uptime</div>
+            </div>
+            <div class="bg-white/5 ring-1 ring-white/10 rounded-lg p-4">
+              <div class="text-xs text-slate-400 mb-2">🚨 Alerts Sent</div>
+              <div class="text-2xl font-semibold text-orange-400 mb-1">1.2k</div>
+              <div class="text-xs text-orange-400">+23% today</div>
+            </div>
+          </div>
+
+          <!-- Chart -->
+          <div class="w-full h-24 rounded-lg bg-white/5 ring-1 ring-white/10 p-4">
+            <div class="flex items-end justify-between gap-1 h-full">
+              <div class="w-2 bg-gradient-to-t from-teal-400/30 to-teal-400 rounded-sm" style="height:35%;"></div>
+              <div class="w-2 bg-gradient-to-t from-teal-400/30 to-teal-400 rounded-sm" style="height:55%;"></div>
+              <div class="w-2 bg-gradient-to-t from-teal-400/30 to-teal-400 rounded-sm" style="height:70%;"></div>
+              <div class="w-2 bg-gradient-to-t from-teal-400/30 to-teal-400 rounded-sm" style="height:45%;"></div>
+              <div class="w-2 bg-gradient-to-t from-teal-400/30 to-teal-400 rounded-sm" style="height:85%;"></div>
+              <div class="w-2 bg-gradient-to-t from-teal-400/30 to-teal-400 rounded-sm" style="height:60%;"></div>
+              <div class="w-2 bg-gradient-to-t from-teal-400/30 to-teal-400 rounded-sm" style="height:92%;"></div>
+              <div class="w-2 bg-gradient-to-t from-teal-400/30 to-teal-400 rounded-sm" style="height:75%;"></div>
+              <div class="w-2 bg-gradient-to-t from-teal-400/30 to-teal-400 rounded-sm" style="height:65%;"></div>
+              <div class="w-2 bg-gradient-to-t from-teal-400/30 to-teal-400 rounded-sm" style="height:50%;"></div>
+              <div class="w-2 bg-gradient-to-t from-teal-400/30 to-teal-400 rounded-sm" style="height:80%;"></div>
+              <div class="w-2 bg-gradient-to-t from-teal-400/30 to-teal-400 rounded-sm" style="height:68%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+
+  <script>
+    (function() {
+      const root = document.currentScript.closest('section[data-element-id="aura-emfzp9hq8"]');
+      if (!root) return;
+
+      const toggle = root.querySelector('#billingToggle');
+      const thumb = root.querySelector('#toggleThumb');
+      const buttons = toggle.querySelectorAll('button[data-plan]');
+      const saveBadge = root.querySelector('#saveBadge');
+      const priceEls = root.querySelectorAll('[data-price]');
+      const termEls = root.querySelectorAll('[data-term]');
+      const noteEls = root.querySelectorAll('[data-billing-note]');
+
+      function setPlan(plan) {
+        // Update pressed state and styles
+        buttons.forEach(btn => {
+          const active = btn.getAttribute('data-plan') === plan;
+          btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+          btn.classList.toggle('text-slate-900', active);
+          btn.classList.toggle('text-slate-300', !active);
+        });
+
+        // Move thumb
+        if (plan === 'monthly') {
+          thumb.style.left = 'calc(50% - 92px + 1px)'; // right segment
+        } else {
+          thumb.style.left = '4px'; // left segment
+        }
+
+        // Update prices and labels
+        priceEls.forEach(el => {
+          const monthly = el.getAttribute('data-monthly');
+          const annual = el.getAttribute('data-annual');
+          const value = plan === 'annual' ? annual : monthly;
+          el.textContent = `$${value}`;
+        });
+        termEls.forEach(el => el.textContent = plan === 'annual' ? '/year' : '/month');
+        noteEls.forEach(el => el.textContent = plan === 'annual' ? 'Billed annually' : 'Pay monthly');
+
+        // Save badge visibility
+        if (saveBadge) saveBadge.classList.toggle('hidden', plan !== 'annual');
+      }
+
+      // Initialize
+      setPlan('monthly');
+
+      // Handlers
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => setPlan(btn.getAttribute('data-plan')));
+      });
+    })();
+  </script>
+</section>
+
+    <!-- Pricing Section -->
+    <section class="py-24 px-4 relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900/20 to-slate-900"></div>
+      <div class="max-w-7xl mx-auto relative z-10">
+        <!-- Header -->
+        <div class="text-center mb-16">
+          <div class="inline-flex items-center gap-2 px-3 py-1 text-xs font-medium text-teal-300 bg-teal-400/10 ring-1 ring-teal-400/20 rounded-full mb-8">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3">
+              <path d="M8 2v4"></path>
+              <path d="M16 2v4"></path>
+              <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+              <path d="M3 10h18"></path>
+            </svg>
+            Air Quality Plans
+          </div>
+          
+          <h2 class="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">AirAware</span> Pricing Plans
+          </h2>
+          <p class="text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed mb-12">
+            Clean air insights for everyone. From individuals to entire cities.
+          </p>
+
+          <!-- Billing Toggle -->
+          <div class="inline-flex items-center p-1 rounded-xl bg-slate-800/50 border border-slate-700/50">
+            <button class="billing-toggle px-6 py-2 text-sm font-medium rounded-lg transition-all duration-300 text-white bg-blue-500 shadow-lg" data-period="annual">
+              Annual
+            </button>
+            <button class="billing-toggle px-6 py-2 text-sm font-medium rounded-lg transition-all duration-300 text-slate-400 hover:text-white" data-period="monthly">
+              Monthly
+            </button>
+          </div>
+        </div>
+
+        <!-- Pricing Cards -->
+        <div class="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <!-- Basic Plan -->
+          <div class="relative group">
+            <div class="relative p-8 rounded-2xl bg-slate-800/40 border border-slate-700/50 hover:border-slate-600/50 transition-all duration-300 h-full">
+              <div class="mb-8">
+                <h3 class="text-xl font-bold text-white mb-1 flex items-center gap-2">
+                  <span class="text-lg">👨‍👩‍👧‍👦</span> Citizens
+                </h3>
+                <div class="flex items-baseline mb-4">
+                  <span class="text-4xl font-bold text-teal-400">Free</span>
+                  <span class="text-slate-400 ml-2">forever</span>
+                </div>
+                <p class="text-slate-300 text-sm leading-relaxed mb-2">
+                  Essential air quality insights for individuals, families, and communities across Delhi-NCR.
+                </p>
+                <div class="inline-flex items-center gap-1 px-2 py-1 bg-teal-400/10 text-teal-300 rounded-full text-xs font-medium mb-4">
+                  <span class="w-2 h-2 bg-teal-400 rounded-full"></span>
+                  2M+ active users
+                </div>
+              </div>
+
+              <div class="space-y-3 mb-8">
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-5 h-5 rounded-full bg-teal-500/20 flex items-center justify-center mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-400">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-white text-sm font-medium">Real-time AQI monitoring</span>
+                    <p class="text-slate-400 text-xs mt-0.5">Live pollution levels for your exact location</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-5 h-5 rounded-full bg-teal-500/20 flex items-center justify-center mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-400">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-white text-sm font-medium">Health impact alerts</span>
+                    <p class="text-slate-400 text-xs mt-0.5">When air quality affects your health category</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-5 h-5 rounded-full bg-teal-500/20 flex items-center justify-center mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-400">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-white text-sm font-medium">7-day air quality forecast</span>
+                    <p class="text-slate-400 text-xs mt-0.5">Plan outdoor activities with confidence</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-5 h-5 rounded-full bg-teal-500/20 flex items-center justify-center mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-400">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-white text-sm font-medium">Safe route recommendations</span>
+                    <p class="text-slate-400 text-xs mt-0.5">Find cleaner paths for walking & cycling</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-5 h-5 rounded-full bg-teal-500/20 flex items-center justify-center mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-400">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-white text-sm font-medium">Community reporting</span>
+                    <p class="text-slate-400 text-xs mt-0.5">Report pollution sources & air quality issues</p>
+                  </div>
+                </div>
+              </div>
+
+              <button onclick="showSignupPage()" class="w-full py-3 px-4 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl">
+                🌱 Get Started Free
+              </button>
+            </div>
+          </div>
+
+          <!-- Pro Plan -->
+          <div class="relative group">
+            <!-- Most Popular Badge -->
+            <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+              <div class="bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-medium px-4 py-2 rounded-full shadow-lg">
+                Most popular
+              </div>
+            </div>
+            
+            <div class="relative p-8 rounded-2xl bg-gradient-to-br from-blue-900/20 to-purple-900/20 border border-blue-500/30 hover:border-blue-400/50 transition-all duration-300 h-full transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20">
+              <div class="mb-8">
+                <h3 class="text-xl font-bold text-white mb-1 flex items-center gap-2">
+                  <span class="text-lg">�</span> Business Pro
+                </h3>
+                <div class="flex items-baseline mb-4">
+                  <span class="text-4xl font-bold text-white transition-all duration-300" data-price="business">₹12,999</span>
+                  <span class="text-slate-400 ml-2">/month</span>
+                </div>
+                <p class="text-slate-300 text-sm leading-relaxed mb-2">
+                  Comprehensive air quality management for enterprises, factories, and multi-location businesses.
+                </p>
+                <div class="flex items-center gap-2 mb-4">
+                  <div class="inline-flex items-center gap-1 px-2 py-1 bg-blue-400/10 text-blue-300 rounded-full text-xs font-medium">
+                    <span class="w-2 h-2 bg-blue-400 rounded-full"></span>
+                    Up to 50 locations
+                  </div>
+                  <div class="inline-flex items-center gap-1 px-2 py-1 bg-purple-400/10 text-purple-300 rounded-full text-xs font-medium">
+                    <span class="w-2 h-2 bg-purple-400 rounded-full"></span>
+                    24/7 monitoring
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-3 mb-8">
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-5 h-5 rounded-full bg-blue-500/20 flex items-center justify-center mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-white text-sm font-medium">Everything in Citizens plan</span>
+                    <p class="text-slate-400 text-xs mt-0.5">Plus advanced enterprise features</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-5 h-5 rounded-full bg-blue-500/20 flex items-center justify-center mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-white text-sm font-medium">Multi-facility monitoring dashboard</span>
+                    <p class="text-slate-400 text-xs mt-0.5">Centralized control for all your locations</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-5 h-5 rounded-full bg-blue-500/20 flex items-center justify-center mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-white text-sm font-medium">Pollution source identification</span>
+                    <p class="text-slate-400 text-xs mt-0.5">AI-powered analysis of emission sources</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-5 h-5 rounded-full bg-blue-500/20 flex items-center justify-center mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-white text-sm font-medium">Compliance reporting & API</span>
+                    <p class="text-slate-400 text-xs mt-0.5">Automated reports for regulatory compliance</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-5 h-5 rounded-full bg-blue-500/20 flex items-center justify-center mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-white text-sm font-medium">Employee health protection</span>
+                    <p class="text-slate-400 text-xs mt-0.5">Workplace safety alerts & recommendations</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-5 h-5 rounded-full bg-blue-500/20 flex items-center justify-center mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-white text-sm font-medium">Dedicated success manager</span>
+                    <p class="text-slate-400 text-xs mt-0.5">Priority support & implementation guidance</p>
+                  </div>
+                </div>
+              </div>
+
+              <button onclick="showSignupPage()" class="w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl">
+                📊 Start 30-Day Trial
+              </button>
+            </div>
+          </div>
+
+          <!-- Enterprise Plan -->
+          <div class="relative group">
+            <div class="relative p-8 rounded-2xl bg-slate-800/40 border border-slate-700/50 hover:border-slate-600/50 transition-all duration-300 h-full">
+              <div class="mb-8">
+                <h3 class="text-xl font-bold text-white mb-1 flex items-center gap-2">
+                  <span class="text-lg">🏛️</span> Government Enterprise
+                </h3>
+                <div class="flex items-baseline mb-4">
+                  <span class="text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent transition-all duration-300" data-price="government">Custom</span>
+                  <span class="text-slate-400 ml-2">pricing</span>
+                </div>
+                <p class="text-slate-300 text-sm leading-relaxed mb-2">
+                  Complete air quality ecosystem for cities, states, and national governments. Trusted by Delhi Government.
+                </p>
+                <div class="flex items-center gap-2 mb-4">
+                  <div class="inline-flex items-center gap-1 px-2 py-1 bg-orange-400/10 text-orange-300 rounded-full text-xs font-medium">
+                    <span class="w-2 h-2 bg-orange-400 rounded-full"></span>
+                    City-scale deployment
+                  </div>
+                  <div class="inline-flex items-center gap-1 px-2 py-1 bg-red-400/10 text-red-300 rounded-full text-xs font-medium">
+                    <span class="w-2 h-2 bg-red-400 rounded-full"></span>
+                    Policy integration
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-3 mb-8">
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-5 h-5 rounded-full bg-orange-500/20 flex items-center justify-center mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-white text-sm font-medium">Everything in Business Pro</span>
+                    <p class="text-slate-400 text-xs mt-0.5">Plus comprehensive governance tools</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-5 h-5 rounded-full bg-orange-500/20 flex items-center justify-center mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-white text-sm font-medium">City-wide sensor network</span>
+                    <p class="text-slate-400 text-xs mt-0.5">1000+ monitoring points across urban areas</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-5 h-5 rounded-full bg-orange-500/20 flex items-center justify-center mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-white text-sm font-medium">Policy decision support system</span>
+                    <p class="text-slate-400 text-xs mt-0.5">AI-driven policy recommendations & impact modeling</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-5 h-5 rounded-full bg-orange-500/20 flex items-center justify-center mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-white text-sm font-medium">Emergency response automation</span>
+                    <p class="text-slate-400 text-xs mt-0.5">Automatic alerts during air quality emergencies</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-5 h-5 rounded-full bg-orange-500/20 flex items-center justify-center mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-white text-sm font-medium">White-glove implementation</span>
+                    <p class="text-slate-400 text-xs mt-0.5">Full deployment team & ongoing technical support</p>
+                  </div>
+                </div>
+              </div>
+
+              <button onclick="showSignupPage()" class="w-full py-3 px-4 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl">
+                🤝 Schedule Demo
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="text-center mt-12">
+          <p class="text-slate-400 text-sm mb-4">
+            All plans include real-time air quality monitoring across Delhi-NCR region.
+          </p>
+          <div class="flex justify-center items-center gap-6 text-xs text-slate-500">
+            <div class="flex items-center gap-1">
+              <span class="w-2 h-2 bg-green-400 rounded-full"></span>
+              <span>Citizens: Free forever</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <span class="w-2 h-2 bg-blue-400 rounded-full"></span>
+              <span>Business: 30-day free trial</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <span class="w-2 h-2 bg-orange-400 rounded-full"></span>
+              <span>Government: Custom deployment</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+    // Billing toggle functionality for pricing section
+    (function() {
+      const toggles = document.querySelectorAll('.billing-toggle');
+      const businessPrice = document.querySelector('[data-price="business"]');
+      const governmentPrice = document.querySelector('[data-price="government"]');
+      
+      const prices = {
+        monthly: {
+          business: '₹14,999',
+          government: 'Custom'
+        },
+        annual: {
+          business: '₹12,999',
+          government: 'Custom'
+        }
+      };
+
+      function setPlan(period) {
+        // Update toggle states
+        toggles.forEach(toggle => {
+          if (toggle.getAttribute('data-period') === period) {
+            toggle.classList.add('text-white', 'bg-blue-500', 'shadow-lg');
+            toggle.classList.remove('text-slate-400', 'hover:text-white');
+          } else {
+            toggle.classList.remove('text-white', 'bg-blue-500', 'shadow-lg');
+            toggle.classList.add('text-slate-400', 'hover:text-white');
+          }
+        });
+
+        // Update prices with animation
+        if (businessPrice) {
+          businessPrice.style.transform = 'scale(0.8)';
+          businessPrice.style.opacity = '0.5';
+          setTimeout(() => {
+            businessPrice.textContent = prices[period].business;
+            businessPrice.style.transform = 'scale(1)';
+            businessPrice.style.opacity = '1';
+          }, 150);
+        }
+        
+        if (governmentPrice) {
+          governmentPrice.style.transform = 'scale(0.8)';
+          governmentPrice.style.opacity = '0.5';
+          setTimeout(() => {
+            governmentPrice.textContent = prices[period].government;
+            governmentPrice.style.transform = 'scale(1)';
+            governmentPrice.style.opacity = '1';
+          }, 150);
+        }
+      }
+
+      // Set default to annual
+      setPlan('annual');
+
+      // Handlers
+      toggles.forEach(btn => {
+        btn.addEventListener('click', () => setPlan(btn.getAttribute('data-period')));
+      });
+    })();
+    </script>
+
+    <!-- Divider -->
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+    </div>
+
+   <!-- Contact Section -->
+   <section id="contact" class="py-16 px-4 relative overflow-hidden">
+     <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
+     <div class="max-w-6xl mx-auto relative z-10">
+       
+       <!-- Header -->
+       <div class="text-center mb-16">
+         <div class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-teal-300 bg-teal-400/10 ring-1 ring-teal-400/20 rounded-full mb-8">
+           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+             <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
+           </svg>
+           Get in Touch
+         </div>
+         
+         <h2 class="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">
+           Ready to Improve Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">Air Quality?</span>
+         </h2>
+         <p class="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+           Whether you're a citizen concerned about air pollution, a business looking for environmental solutions, or a government planning policy interventions—we're here to help you breathe easier.
+         </p>
+       </div>
+
+       <!-- Contact Form Container -->
+       <div class="max-w-5xl mx-auto">
+         <div class="bg-slate-800/20 backdrop-blur-sm border border-slate-700/30 rounded-3xl p-8 md:p-12 shadow-2xl">
+           
+           <!-- Contact Info & Form Grid -->
+           <div class="grid lg:grid-cols-5 gap-12 items-start">
+             
+             <!-- Contact Information -->
+             <div class="lg:col-span-2 space-y-8">
+               <div class="space-y-6">
+                 <div class="inline-flex items-center gap-2 rounded-full bg-teal-400/10 text-teal-300 ring-1 ring-teal-400/20 px-3 py-1 text-sm">
+                   <span class="h-2 w-2 rounded-full bg-teal-400 animate-pulse"></span>
+                   Air Quality Experts
+                 </div>
+                 <h3 class="text-2xl font-bold text-white tracking-tight">Let's Clean the Air Together</h3>
+                 
+                 <ul class="space-y-4 text-sm text-slate-300">
+                   <li class="flex items-start gap-3">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-teal-400 mt-0.5 flex-shrink-0">
+                       <path d="M20 6 9 17l-5-5"></path>
+                     </svg>
+                     <span>Real-time air quality monitoring across Delhi-NCR</span>
+                   </li>
+                   <li class="flex items-start gap-3">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-teal-400 mt-0.5 flex-shrink-0">
+                       <path d="M20 6 9 17l-5-5"></path>
+                     </svg>
+                     <span>AI-powered insights and pollution predictions</span>
+                   </li>
+                   <li class="flex items-start gap-3">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-teal-400 mt-0.5 flex-shrink-0">
+                       <path d="M20 6 9 17l-5-5"></path>
+                     </svg>
+                     <span>Custom solutions for businesses and governments</span>
+                   </li>
+                   <li class="flex items-start gap-3">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-teal-400 mt-0.5 flex-shrink-0">
+                       <path d="M20 6 9 17l-5-5"></path>
+                     </svg>
+                     <span>24/7 support and expert consultation</span>
+                   </li>
+                 </ul>
+                 
+                 <!-- Contact Details -->
+                 <div class="space-y-4 pt-6 border-t border-slate-700/50">
+                   <a href="mailto:contact@airaware.in" class="inline-flex items-center gap-3 text-slate-300 hover:text-teal-300 transition-colors group">
+                     <div class="p-2 bg-teal-400/10 rounded-lg group-hover:bg-teal-400/20 transition-colors">
+                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-400">
+                         <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                         <path d="m22 7-10 5L2 7"></path>
+                       </svg>
+                     </div>
+                     <span>contact@airaware.in</span>
+                   </a>
+                   
+                   <a href="tel:+911123456789" class="inline-flex items-center gap-3 text-slate-300 hover:text-teal-300 transition-colors group">
+                     <div class="p-2 bg-teal-400/10 rounded-lg group-hover:bg-teal-400/20 transition-colors">
+                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-400">
+                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                       </svg>
+                     </div>
+                     <span>+91 11 2345 6789</span>
+                   </a>
+                   
+                   <!-- Response Time -->
+                   <div class="inline-flex items-center gap-3 text-slate-400">
+                     <div class="p-2 bg-slate-700/30 rounded-lg">
+                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400">
+                         <circle cx="12" cy="12" r="10"></circle>
+                         <polyline points="12,6 12,12 16,14"></polyline>
+                       </svg>
+                     </div>
+                     <span class="text-sm">We respond within 24 hours</span>
+                   </div>
+                 </div>
+               </div>
+             </div>
+
+             <!-- Contact Form -->
+             <form id="contact-form" class="lg:col-span-3 space-y-6">
+               
+               <!-- Name and Email Row -->
+               <div class="grid md:grid-cols-2 gap-6">
+                 <div class="space-y-2">
+                   <label for="name" class="block text-sm font-semibold text-slate-200 flex items-center gap-2">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-teal-400">
+                       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                       <circle cx="12" cy="7" r="4"></circle>
+                     </svg>
+                     Full Name *
+                   </label>
+                   <input 
+                     id="name" 
+                     name="name" 
+                     type="text" 
+                     required 
+                     placeholder="Enter your full name" 
+                     class="w-full px-4 py-3 bg-slate-800/30 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-400/20 hover:border-slate-500 transition-all duration-300"
+                   >
+                 </div>
+                 
+                 <div class="space-y-2">
+                   <label for="email" class="block text-sm font-semibold text-slate-200 flex items-center gap-2">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-teal-400">
+                       <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                       <path d="m22 7-10 5L2 7"></path>
+                     </svg>
+                     Email Address *
+                   </label>
+                   <input 
+                     id="email" 
+                     name="email" 
+                     type="email" 
+                     required 
+                     placeholder="your.email@example.com" 
+                     class="w-full px-4 py-3 bg-slate-800/30 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-400/20 hover:border-slate-500 transition-all duration-300"
+                   >
+                 </div>
+               </div>
+
+               <!-- Organization and Role Row -->
+               <div class="grid md:grid-cols-2 gap-6">
+                 <div class="space-y-2">
+                   <label for="organization" class="block text-sm font-semibold text-slate-200 flex items-center gap-2">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-teal-400">
+                       <path d="M3 21h18"></path>
+                       <path d="M5 21V7l8-4v18"></path>
+                       <path d="M19 21V11l-6-4"></path>
+                     </svg>
+                     Organization
+                   </label>
+                   <input 
+                     id="organization" 
+                     name="organization" 
+                     type="text" 
+                     placeholder="Company, NGO, Government Agency..." 
+                     class="w-full px-4 py-3 bg-slate-800/30 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-400/20 hover:border-slate-500 transition-all duration-300"
+                   >
+                 </div>
+                 
+                 <div class="space-y-2">
+                   <label for="userType" class="block text-sm font-semibold text-slate-200 flex items-center gap-2">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-teal-400">
+                       <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                       <circle cx="9" cy="7" r="4"></circle>
+                       <path d="m22 21-3-3"></path>
+                     </svg>
+                     I am a... *
+                   </label>
+                   <div class="relative">
+                     <select 
+                       id="userType" 
+                       name="userType" 
+                       required
+                       class="w-full px-4 py-3 pr-12 bg-slate-800/30 border border-slate-600/50 rounded-xl text-white outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-400/20 hover:border-slate-500 transition-all duration-300 cursor-pointer appearance-none bg-no-repeat bg-right"
+                       style="background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTYgOUwxMiAxNUwxOCA5IiBzdHJva2U9IiM5NGE4YjMiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo='); background-position: right 12px center; background-size: 20px;"
+                     >
+                       <option value="" disabled selected style="color: #94a3b8; background: #1e293b;">
+                         🔍 Choose your role or organization type...
+                       </option>
+                       
+                       <!-- Individual/Personal -->
+                       <option value="citizen" style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); color: #166534; padding: 12px; font-weight: 500;">
+                         👨‍👩‍👧‍👦 Citizen
+                       </option>
+                       
+                       <!-- Business & Industry -->
+                       <option value="business" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); color: #1e40af; padding: 12px; font-weight: 500;">
+                         🏭 Business
+                       </option>
+                       
+                       <!-- Government & Policy -->
+                       <option value="government" style="background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%); color: #92400e; padding: 12px; font-weight: 500;">
+                         🏛️ Government / Municipal
+                       </option>
+                       
+                       <!-- Research & Academia -->
+                       <option value="research" style="background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); color: #7c2d12; padding: 12px; font-weight: 500;">
+                         🔬 Research / Academic
+                       </option>
+                       
+                       <!-- Other -->
+                       <option value="other" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); color: #374151; padding: 12px; font-weight: 500;">
+                         🔧 Other
+                       </option>
+                     </select>
+                     
+                     <!-- Custom dropdown arrow -->
+                     <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400">
+                         <polyline points="6,9 12,15 18,9"></polyline>
+                       </svg>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+
+               <!-- Subject -->
+               <div class="space-y-2">
+                 <label for="subject" class="block text-sm font-semibold text-slate-200 flex items-center gap-2">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-teal-400">
+                     <path d="M21.2 8.4c.5.38.8.97.8 1.6v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10a2 2 0 0 1 .8-1.6l8-6a2 2 0 0 1 2.4 0l8 6Z"></path>
+                     <path d="m22 10-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 10"></path>
+                   </svg>
+                   Subject *
+                 </label>
+                 <input 
+                   id="subject" 
+                   name="subject" 
+                   type="text" 
+                   required 
+                   placeholder="What can we help you with?" 
+                   class="w-full px-4 py-3 bg-slate-800/30 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-400/20 hover:border-slate-500 transition-all duration-300"
+                 >
+               </div>
+
+               <!-- Message -->
+               <div class="space-y-2">
+                 <label for="message" class="block text-sm font-semibold text-slate-200 flex items-center gap-2">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-teal-400">
+                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                   </svg>
+                   Your Message *
+                 </label>
+                 <textarea 
+                   id="message" 
+                   name="message" 
+                   rows="5" 
+                   required
+                   placeholder="Tell us about your air quality concerns, project requirements, timeline, or any specific questions you have. The more details you provide, the better we can assist you."
+                   class="w-full px-4 py-3 bg-slate-800/30 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-400/20 hover:border-slate-500 transition-all duration-300 resize-none"
+                 ></textarea>
+               </div>
+
+               <!-- Privacy Consent -->
+               <div class="flex items-start gap-4 p-4 bg-slate-800/20 rounded-xl border border-slate-600/30">
+                 <input 
+                   type="checkbox" 
+                   id="privacy" 
+                   name="privacy" 
+                   required
+                   class="mt-1 h-5 w-5 rounded-md border-slate-500 bg-slate-800/50 text-teal-400 focus:ring-teal-400/50 focus:ring-offset-0 focus:ring-2"
+                 >
+                 <div class="flex-1">
+                   <label for="privacy" class="text-sm text-slate-200 leading-relaxed">
+                     <span class="font-semibold text-white">Privacy Agreement:</span> I agree to AirAware's 
+                     <a href="/privacy" class="text-teal-400 hover:text-teal-300 underline font-medium transition-colors">Privacy Policy</a> 
+                     and consent to being contacted about air quality solutions and updates.
+                   </label>
+                 </div>
+               </div>
+
+               <!-- Submit Button -->
+               <button 
+                 type="submit"
+                 id="submit-button"
+                 class="w-full py-4 px-8 bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-white font-bold text-lg rounded-xl transition-all duration-300 shadow-2xl hover:shadow-teal-400/30 transform hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-teal-400/30 active:scale-[0.98]"
+               >
+                 <span id="button-content" class="flex items-center justify-center gap-3">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                     <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path>
+                     <path d="m21.854 2.147-10.94 10.939"></path>
+                   </svg>
+                   Send Message & Get Started
+                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-pulse">
+                     <polyline points="9,18 15,12 9,6"></polyline>
+                   </svg>
+                 </span>
+               </button>
+               
+               <!-- Success Message -->
+               <div id="success-message" class="hidden p-4 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-400/30 rounded-xl">
+                 <div class="flex items-center gap-3">
+                   <div class="flex-shrink-0 w-8 h-8 bg-green-400/20 rounded-full flex items-center justify-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400">
+                       <polyline points="20,6 9,17 4,12"></polyline>
+                     </svg>
+                   </div>
+                   <div>
+                     <h4 class="text-green-300 font-semibold">✨ Message Sent Successfully!</h4>
+                     <p class="text-green-400/80 text-sm mt-1">Thank you for reaching out! We'll respond within 24 hours.</p>
+                   </div>
+                 </div>
+               </div>
+               
+               <!-- Error Message -->
+               <div id="error-message" class="hidden p-4 bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-red-400/30 rounded-xl">
+                 <div class="flex items-center gap-3">
+                   <div class="flex-shrink-0 w-8 h-8 bg-red-400/20 rounded-full flex items-center justify-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-400">
+                       <circle cx="12" cy="12" r="10"></circle>
+                       <line x1="15" y1="9" x2="9" y2="15"></line>
+                       <line x1="9" y1="9" x2="15" y2="15"></line>
+                     </svg>
+                   </div>
+                   <div>
+                     <h4 class="text-red-300 font-semibold">❌ Message Failed to Send</h4>
+                     <p class="text-red-400/80 text-sm mt-1">Please try again or email us directly at contact@airaware.in</p>
+                   </div>
+                 </div>
+               </div>
+             </form>
+           </div>
+         </div>
+       </div>
+     </div>
+   </section>
+
+    <!-- Divider -->
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+    </div>
+
+    <!-- Compact Footer -->
+    <footer class="relative bg-gradient-to-br from-slate-900 to-slate-800 border-t border-white/10">
+      <div class="max-w-7xl mx-auto px-6 py-12 relative z-10">
+        
+        <!-- Main Content -->
+        <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-8 mb-8">
+          
+          <!-- Brand & AQI -->
+          <div class="lg:col-span-2">
+            <div class="flex items-center gap-3 mb-4">
+              <a href="/home" class="text-2xl text-white tracking-wide hover:text-teal-300 transition-colors" style="font-family: 'Great Vibes', 'Dancing Script', cursive; text-shadow: 0 0 10px rgba(20, 184, 166, 0.5);">AirAware</a>
+              <div class="flex items-center gap-1 px-2 py-1 bg-red-500/10 ring-1 ring-red-400/20 rounded-lg">
+                <span class="w-2 h-2 bg-red-400 rounded-full animate-pulse"></span>
+                <span class="text-xs text-red-300 font-medium">AQI 294</span>
+              </div>
+            </div>
+            
+            <p class="text-slate-300/80 text-sm mb-6 max-w-md">
+              Real-time air quality monitoring and AI-powered insights for Delhi-NCR. Building cleaner cities through technology.
+            </p>
+            
+            <!-- Social Links -->
+            <div class="flex items-center gap-2">
+              <a href="https://twitter.com/airaware_delhi" class="p-2 rounded-lg bg-white/5 hover:bg-blue-500/20 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 hover:text-blue-400 transition-colors">
+                  <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
+                </svg>
+              </a>
+              <a href="https://instagram.com/airaware_delhi" class="p-2 rounded-lg bg-white/5 hover:bg-pink-500/20 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 hover:text-pink-400 transition-colors">
+                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                  <path d="m16 11.37-.02-.02-.01-.02a2.98 2.98 0 0 0-.54-1.1c-.5-.5-1.1-.8-1.8-.8-.73 0-1.33.3-1.8.8-.47.5-.8 1.1-.8 1.8s.33 1.3.8 1.8c.47.5 1.07.8 1.8.8.73 0 1.33-.3 1.8-.8a2.98 2.98 0 0 0 .55-1.1z"></path>
+                  <path d="m17.5 6.5h.01"></path>
+                </svg>
+              </a>
+              <a href="https://linkedin.com/company/airaware" class="p-2 rounded-lg bg-white/5 hover:bg-blue-600/20 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 hover:text-blue-500 transition-colors">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                  <rect width="4" height="12" x="2" y="9"></rect>
+                  <circle cx="4" cy="4" r="2"></circle>
+                </svg>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Platform -->
+          <div>
+            <h4 class="text-sm font-semibold text-white mb-4">Platform</h4>
+            <ul class="space-y-2 text-sm text-slate-300/80">
+              <li><a href="/citizen-app" class="hover:text-teal-400 transition-colors">Citizen App</a></li>
+              <li><a href="/policy-dashboard" class="hover:text-blue-400 transition-colors">Policy Dashboard</a></li>
+              <li><a href="/live-monitor" class="hover:text-green-400 transition-colors">Live Monitoring</a></li>
+              <li><a href="/safe-routes" class="hover:text-purple-400 transition-colors">Safe Routes</a></li>
+            </ul>
+          </div>
+          
+          <!-- Support -->
+          <div>
+            <h4 class="text-sm font-semibold text-white mb-4">Support</h4>
+            <ul class="space-y-2 text-sm text-slate-300/80">
+              <li><a href="/help" class="hover:text-teal-400 transition-colors">Help Center</a></li>
+              <li><a href="/contact" class="hover:text-blue-400 transition-colors">Contact</a></li>
+              <li><a href="/privacy" class="hover:text-slate-300 transition-colors">Privacy</a></li>
+              <li><a href="/terms" class="hover:text-slate-300 transition-colors">Terms</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Bottom Bar -->
+        <div class="pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-400">
+          <div class="flex items-center gap-4">
+            <p>© 2025 AirAware Delhi-NCR</p>
+            <span class="text-slate-600">•</span>
+            <div class="flex items-center gap-2">
+              <span class="text-blue-400">NASA</span>
+              <span class="text-slate-600">•</span>
+              <span class="text-green-400">CPCB</span>
+              <span class="text-slate-600">•</span>
+              <span class="text-purple-400">OpenAI</span>
+            </div>
+          </div>
+          
+          <!-- Emergency -->
+          <div class="flex items-center gap-3">
+            <a href="tel:112" class="flex items-center gap-2 px-3 py-1 bg-red-500/10 ring-1 ring-red-400/20 rounded-md hover:bg-red-500/20 transition-all">
+              <span class="text-red-400 text-xs">🚨</span>
+              <span class="text-red-300 font-medium">112</span>
+            </a>
+            <a href="tel:+911123814875" class="flex items-center gap-2 px-3 py-1 bg-blue-500/10 ring-1 ring-blue-400/20 rounded-md hover:bg-blue-500/20 transition-all">
+              <span class="text-blue-400 text-xs">📞</span>
+              <span class="text-blue-300 font-medium">Pollution Control</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <style>
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(32px) translateX(32px);
+                filter: blur(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) translateX(0);
+                filter: blur(0);
+            }
+        }
+    </style>
+
+    <script>
+        lucide.createIcons();
+        
+        // Pricing billing toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const billingToggles = document.querySelectorAll('.billing-toggle');
+            
+            billingToggles.forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    const period = this.getAttribute('data-period');
+                    
+                    // Update toggle states
+                    billingToggles.forEach(t => {
+                        t.classList.remove('bg-blue-500', 'shadow-lg', 'text-white');
+                        t.classList.add('text-slate-400', 'hover:text-white');
+                    });
+                    
+                    this.classList.add('bg-blue-500', 'shadow-lg', 'text-white');
+                    this.classList.remove('text-slate-400', 'hover:text-white');
+                    
+                    // Here you could update pricing display based on period
+                    // For now, we'll just show the toggle working
+                });
+            });
+        });
+
+        // Sticky scroll animation for How It Works section
+        document.addEventListener('DOMContentLoaded', function() {
+            const steps = document.querySelectorAll('.space-y-24 > div');
+            const rightPanel = document.querySelector('.lg\\:sticky');
+            
+            // Create intersection observer
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const stepIndex = Array.from(steps).indexOf(entry.target);
+                        
+                        // Add active state to current step
+                        steps.forEach((step, index) => {
+                            if (index === stepIndex) {
+                                step.classList.add('scale-105');
+                                step.classList.remove('opacity-70');
+                            } else {
+                                step.classList.remove('scale-105');
+                                step.classList.add('opacity-70');
+                            }
+                        });
+                        
+                        // Update right panel based on active step
+                        if (rightPanel) {
+                            const panelContent = rightPanel.querySelector('.bg-black\\/40');
+                            if (panelContent) {
+                                // Add subtle animation based on step
+                                panelContent.style.transform = `translateY(${stepIndex * -3}px) rotateY(${stepIndex * 0.5}deg)`;
+                                panelContent.style.transition = 'transform 0.6s ease-out';
+                                
+                                // Change glow color based on step
+                                const glowElement = rightPanel.querySelector('.blur-sm');
+                                if (glowElement) {
+                                    const colors = [
+                                        'radial-gradient(60% 50% at 70% 30%, rgba(45,212,191,0.15), transparent 60%)', // teal
+                                        'radial-gradient(60% 50% at 70% 30%, rgba(147,51,234,0.15), transparent 60%)', // purple  
+                                        'radial-gradient(60% 50% at 70% 30%, rgba(16,185,129,0.15), transparent 60%)'  // emerald
+                                    ];
+                                    glowElement.style.background = colors[stepIndex] || colors[0];
+                                    glowElement.style.transition = 'background 0.6s ease-out';
+                                }
+                            }
+                        }
+                    }
+                });
+            }, {
+                threshold: 0.6,
+                rootMargin: '-10% 0px -30% 0px'
+            });
+            
+            // Observe all steps
+            steps.forEach(step => observer.observe(step));
+            
+            // Initial state - make first step active
+            if (steps.length > 0) {
+                steps[0].classList.add('scale-105');
+                for (let i = 1; i < steps.length; i++) {
+                    steps[i].classList.add('opacity-70');
+                }
+            }
+        });
+        
+        // Mobile Menu Toggle Function
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            let isMenuOpen = false;
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    isMenuOpen = !isMenuOpen;
+                    
+                    if (isMenuOpen) {
+                        mobileMenu.classList.remove('hidden');
+                        mobileMenu.classList.add('animate-fade-in');
+                    } else {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenu.classList.remove('animate-fade-in');
+                    }
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (isMenuOpen && !mobileMenu.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+                        isMenuOpen = false;
+                        mobileMenu.classList.add('hidden');
+                        mobileMenu.classList.remove('animate-fade-in');
+                    }
+                });
+
+                // Close menu when clicking on menu links
+                mobileMenu.addEventListener('click', function(event) {
+                    if (event.target.tagName === 'A') {
+                        isMenuOpen = false;
+                        mobileMenu.classList.add('hidden');
+                        mobileMenu.classList.remove('animate-fade-in');
+                    }
+                });
+            }
+        });
+        
+        // Enhanced Mobile Dropdown Menu Toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            let isMenuOpen = false;
+
+            function openMobileMenu() {
+                isMenuOpen = true;
+                mobileMenu.classList.remove('invisible', 'opacity-0', 'scale-95');
+                mobileMenu.classList.add('opacity-100', 'scale-100');
+                
+                // Animate hamburger to X
+                const lines = mobileMenuBtn.querySelectorAll('.hamburger-line');
+                lines[0].style.transform = 'rotate(45deg) translate(3px, 3px)';
+                lines[1].style.opacity = '0';
+                lines[2].style.transform = 'rotate(-45deg) translate(3px, -3px)';
+                
+                // Prevent body scroll
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMobileMenu() {
+                isMenuOpen = false;
+                mobileMenu.classList.remove('opacity-100', 'scale-100');
+                mobileMenu.classList.add('invisible', 'opacity-0', 'scale-95');
+                
+                // Reset hamburger animation
+                const lines = mobileMenuBtn.querySelectorAll('.hamburger-line');
+                lines[0].style.transform = 'rotate(0) translate(0, 0)';
+                lines[1].style.opacity = '1';
+                lines[2].style.transform = 'rotate(0) translate(0, 0)';
+                
+                // Restore body scroll
+                document.body.style.overflow = 'auto';
+            }
+
+            if (mobileMenuBtn && mobileMenu) {
+                // Toggle menu on button click
+                mobileMenuBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (isMenuOpen) {
+                        closeMobileMenu();
+                    } else {
+                        openMobileMenu();
+                    }
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (isMenuOpen && !mobileMenu.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+                        closeMobileMenu();
+                    }
+                });
+
+                // Close menu when clicking on menu links
+                mobileMenu.addEventListener('click', function(event) {
+                    if (event.target.tagName === 'A' || event.target.closest('a')) {
+                        closeMobileMenu();
+                    }
+                });
+
+                // Close menu on escape key
+                document.addEventListener('keydown', function(event) {
+                    if (event.key === 'Escape' && isMenuOpen) {
+                        closeMobileMenu();
+                    }
+                });
+
+                // Close menu on window resize to desktop
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth >= 1024 && isMenuOpen) {
+                        closeMobileMenu();
+                    }
+                });
+            }
+        });
+        
+        // FAQ Toggle Function
+        function toggleFAQ(id) {
+            const content = document.getElementById(`content-${id}`);
+            const icon = document.getElementById(`icon-${id}`);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(45deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+        
+        // Typing animation for chat
+        (function() {
+            const responses = [
+                "Excellent! Monitoring Delhi-NCR air quality with real-time data:",
+                "Perfect! Building cleaner cities through advanced analytics:",
+                "Great! Protecting public health with AI-powered insights:",
+                "Amazing! Creating sustainable environments with smart monitoring:"
+            ];
+            
+            let currentResponseIndex = 0;
+            const responseElement = document.getElementById('aiResponse');
+            const statusElement = document.getElementById('typingStatus');
+
+            function typeResponse(text, callback) {
+                if (!responseElement) return;
+                responseElement.innerHTML = '';
+                let i = 0;
+                
+                function type() {
+                    if (i < text.length) {
+                        responseElement.innerHTML = text.substring(0, i + 1);
+                        i++;
+                        const delay = 40 + Math.random() * 30;
+                        setTimeout(type, delay);
+                    } else {
+                        if (statusElement) {
+                            setTimeout(() => {
+                                statusElement.textContent = 'Analysis complete';
+                                setTimeout(callback, 2000);
+                            }, 1000);
+                        }
+                    }
+                }
+                
+                if (statusElement) statusElement.textContent = 'Analyzing air quality data...';
+                setTimeout(type, 800);
+            }
+
+            function startNextResponse() {
+                typeResponse(responses[currentResponseIndex], () => {
+                    currentResponseIndex = (currentResponseIndex + 1) % responses.length;
+                    setTimeout(startNextResponse, 1500);
+                });
+            }
+
+            // Start the loop
+            setTimeout(startNextResponse, 2000);
+        })();
+        
+        // EmailJS Configuration and Contact Form Handler
+        (function() {
+            // EmailJS Configuration
+            const EMAILJS_CONFIG = {
+                PUBLIC_KEY: 'crHauJ88UDzOS4puy',
+                SERVICE_ID: 'service_e3rc8vk', // Your actual service ID
+                TEMPLATE_ID: 'template_sxw9783'
+            };
+            
+            // Initialize EmailJS with your public key
+            emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+            
+            const form = document.getElementById('contact-form');
+            const submitButton = document.getElementById('submit-button');
+            const buttonContent = document.getElementById('button-content');
+            const successMessage = document.getElementById('success-message');
+            const errorMessage = document.getElementById('error-message');
+            
+            // Form submission handler
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Show loading state
+                submitButton.disabled = true;
+                buttonContent.innerHTML = `
+                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Sending Message...
+                `;
+                
+                // Hide previous messages
+                successMessage.classList.add('hidden');
+                errorMessage.classList.add('hidden');
+                
+                // Get form data
+                const formData = new FormData(form);
+                const templateParams = {
+                    from_name: formData.get('name') || 'Anonymous',
+                    from_email: formData.get('email') || 'no-email@example.com',
+                    organization: formData.get('organization') || 'Not specified',
+                    user_type: formData.get('userType') || 'Not specified',
+                    subject: formData.get('subject') || 'No subject',
+                    message: formData.get('message') || 'No message',
+                    to_name: 'AirAware Team',
+                    reply_to: formData.get('email') || 'no-email@example.com'
+                };
+                
+                // Debug logging
+                console.log('Sending email with config:', EMAILJS_CONFIG);
+                console.log('Template parameters:', templateParams);
+                
+                // Send email using EmailJS
+                emailjs.send(
+                    EMAILJS_CONFIG.SERVICE_ID, // Your EmailJS service ID
+                    EMAILJS_CONFIG.TEMPLATE_ID, // Your EmailJS template ID
+                    templateParams
+                ).then(function(response) {
+                    // Success
+                    console.log('Email sent successfully:', response);
+                    
+                    // Show success message
+                    successMessage.classList.remove('hidden');
+                    successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Reset form
+                    form.reset();
+                    
+                    // Reset button
+                    resetButton();
+                    
+                }, function(error) {
+                    // Enhanced error logging
+                    console.error('Email send failed:', error);
+                    console.error('Error details:', {
+                        status: error.status,
+                        text: error.text,
+                        config: EMAILJS_CONFIG
+                    });
+                    
+                    // Update error message with more details
+                    const errorDetail = document.querySelector('#error-message p');
+                    if (errorDetail) {
+                        if (error.status === 400) {
+                            errorDetail.textContent = 'Configuration error. Please check EmailJS template settings or contact support.';
+                        } else if (error.status === 403) {
+                            errorDetail.textContent = 'Authentication error. Please check your EmailJS public key.';
+                        } else {
+                            errorDetail.textContent = `Error ${error.status}: ${error.text || 'Please try again or contact us directly.'}`; 
+                        }
+                    }
+                    
+                    // Show error message
+                    errorMessage.classList.remove('hidden');
+                    errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Reset button
+                    resetButton();
+                });
+            });
+            
+            function resetButton() {
+                submitButton.disabled = false;
+                buttonContent.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path>
+                        <path d="m21.854 2.147-10.94 10.939"></path>
+                    </svg>
+                    Send Message & Get Started
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-pulse">
+                        <polyline points="9,18 15,12 9,6"></polyline>
+                    </svg>
+                `;
+            }
+        })();
+
+
+    </script>
+
+<style>
+/* Responsive Design Enhancements */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .text-6xl {
+    font-size: 2.5rem !important;
+  }
+  
+  .text-5xl {
+    font-size: 2rem !important;
+  }
+  
+  .text-4xl {
+    font-size: 1.5rem !important;
+  }
+  
+  .text-3xl {
+    font-size: 1.8rem !important;
+  }
+  
+  .text-2xl {
+    font-size: 1.5rem !important;
+  }
+  
+  .px-8 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  .py-16 {
+    padding-top: 4rem !important;
+    padding-bottom: 4rem !important;
+  }
+  
+  .gap-8 {
+    gap: 1rem !important;
+  }
+  
+  .max-w-7xl {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  .p-8 {
+    padding: 1.5rem !important;
+  }
+  
+  .p-6 {
+    padding: 1rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-cols-3 {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+  
+  .grid-cols-2 {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+  
+  .lg\\:grid-cols-3 {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+  
+  .lg\\:grid-cols-2 {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+  
+  .lg\\:grid-cols-12 {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+  
+  .flex-row {
+    flex-direction: column !important;
+  }
+  
+  .space-x-4 > * + * {
+    margin-left: 0 !important;
+    margin-top: 1rem !important;
+  }
+  
+  .space-x-6 > * + * {
+    margin-left: 0 !important;
+    margin-top: 1.5rem !important;
+  }
+}
+
+/* Responsive Background Coverage */
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.aura-background-component {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  z-index: -10 !important;
+}
+
+.aura-background-component > div {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100vw !important;
+  min-height: 100vh !important;
+}
+
+/* Mobile viewport adjustments */
+@media (max-width: 768px) {
+  .aura-background-component {
+    height: 100svh !important;
+    min-height: 100svh !important;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .aura-background-component {
+    height: 100lvh !important;
+    min-height: 100lvh !important;
+  }
+}
+
+/* Mobile Menu Animation */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced Authentication Page Styles */
+.signup-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, 
+    rgba(2, 6, 23, 0.95) 0%, 
+    rgba(15, 23, 42, 0.97) 50%, 
+    rgba(30, 41, 59, 0.95) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  z-index: 9999;
+  overflow-y: auto;
+  animation: fadeInOverlay 0.4s ease-out;
+}
+
+.signup-overlay.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.signup-container {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  animation: slideInUp 0.5s ease-out;
+}
+
+/* Animation keyframes */
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(20px) saturate(180%);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(20, 184, 166, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(20, 184, 166, 0.5);
+  }
+}
+
+/* Enhanced form styling */
+.auth-form-container {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.auth-form-container:hover {
+  box-shadow: 
+    0 35px 70px -12px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.auth-input {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+  transition: all 0.3s ease !important;
+  position: relative;
+}
+
+.auth-input:focus {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(20, 184, 166, 0.6) !important;
+  box-shadow: 
+    0 0 0 2px rgba(20, 184, 166, 0.2),
+    0 4px 12px rgba(20, 184, 166, 0.15) !important;
+  transform: translateY(-1px);
+}
+
+.auth-input::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.auth-button {
+  background: linear-gradient(135deg, #14b8a6 0%, #0f766e 100%) !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-button:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.auth-button:hover:before {
+  left: 100%;
+}
+
+.auth-button:hover {
+  background: linear-gradient(135deg, #0f766e 0%, #115e59 100%) !important;
+  box-shadow: 
+    0 10px 25px rgba(20, 184, 166, 0.3),
+    0 0 20px rgba(20, 184, 166, 0.2) !important;
+  transform: translateY(-2px);
+}
+
+.auth-button:active {
+  transform: translateY(0);
+  box-shadow: 
+    0 5px 15px rgba(20, 184, 166, 0.2),
+    0 0 10px rgba(20, 184, 166, 0.1) !important;
+}
+
+.auth-button:disabled {
+  opacity: 0.6 !important;
+  transform: none !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+}
+
+/* Badge styling */
+.auth-badge {
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.2) 0%, rgba(16, 185, 129, 0.2) 100%);
+  border: 1px solid rgba(20, 184, 166, 0.3);
+  color: #5eead4;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  animation: glowPulse 2s infinite;
+}
+
+/* Title styling */
+.auth-title {
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 2rem;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.auth-subtitle {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+}
+
+/* Link styling */
+.auth-link {
+  color: #5eead4 !important;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.auth-link:hover {
+  color: #7dd3fc !important;
+  text-shadow: 0 0 8px rgba(125, 211, 252, 0.4);
+}
+
+.auth-link:after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background: linear-gradient(90deg, #5eead4, #7dd3fc);
+  transition: width 0.3s ease;
+}
+
+.auth-link:hover:after {
+  width: 100%;
+}
+
+/* Close button styling */
+.auth-close-btn {
+  color: #94a3b8;
+  font-size: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.auth-close-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #fecaca;
+  transform: rotate(90deg) scale(1.1);
+}
+
+/* Label styling */
+.auth-label {
+  color: #e2e8f0;
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Footer text */
+.auth-footer-text {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  .signup-overlay {
+    padding: 10px;
+  }
+  
+  .auth-form-container {
+    margin: 20px 0;
+    border-radius: 16px;
+  }
+  
+  .auth-title {
+    font-size: 1.75rem;
+  }
+  
+  .auth-subtitle {
+    font-size: 0.9rem;
+  }
+}
+
+/* Loading animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.auth-loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 8px;
+}
+
+</style>
+
+<!-- Signup Page Overlay -->
+<div id="signup-overlay" class="signup-overlay">
+  <div class="signup-container">
+    <div id="signup-content"></div>
+  </div>
+</div>
+
+<script>
+// JavaScript for AirAware Platform - Django Authentication Integration
+// Note: Navigation functions (showLoginPage, showSignupPage) are defined in head section
+
+// React Components for authentication forms
+const LoginButton = ({ onClick, isLoading, children = "Login" }) => {
+  const ButtonComponent = motion ? motion.button : 'button';
+  
+  const props = {
+    type: "submit",
+    onClick: onClick,
+    className: `w-full py-4 bg-[#f0f3fa] rounded-2xl text-gray-700 text-lg mb-6 shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff] hover:shadow-[6px_6px_12px_#d1d9e6,-6px_-6px_12px_#ffffff] active:shadow-[inset_4px_4px_8px_#d1d9e6,inset_-4px_-4px_8px_#ffffff] transition-all duration-200 font-mono font-normal ${
+      isLoading ? "opacity-50 cursor-not-allowed" : ""
+    }`,
+    style: { color: "#ff1493" },
+    disabled: isLoading
+  };
+
+  if (motion) {
+    props.whileHover = { scale: 1.02 };
+    props.whileTap = { scale: 0.98 };
+  }
+
+  return React.createElement(ButtonComponent, props, isLoading ? "Loading..." : children);
+};
+
+// Footer Links Component
+const FooterLinks = ({ onSwitchToLogin }) => {
+  return React.createElement('div', {
+    className: "flex justify-between items-center text-sm"
+  }, [
+    React.createElement('button', {
+      key: 'forgot',
+      className: "text-gray-500 hover:text-[#ff1493] hover:underline transition-all duration-200 font-mono"
+    }, "Forgot password?"),
+    React.createElement('button', {
+      key: 'switch',
+      onClick: onSwitchToLogin,
+      className: "text-gray-500 hover:text-[#ff1493] hover:underline transition-all duration-200 font-mono",
+      style: { marginLeft: "5px" }
+    }, "or Sign in")
+  ]);
+};
+
+// Main Login Card Component (for switching between signup/login)
+const NeumorphicLogin = ({ onClose, onSwitchToSignup }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      alert("Please fill in both fields");
+      return;
+    }
+
+    if (!email.includes("@")) {
+      alert("Please enter a valid email address");
+      return;
+    }
+
+    setIsLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    localStorage.setItem("dummyUser", JSON.stringify({
+      email,
+      loginTime: new Date().toISOString(),
+    }));
+
+    alert("Successfully logged in!");
+    onClose();
+  };
+
+  const CardComponent = motion ? motion.div : 'div';
+  const cardProps = motion ? {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6 }
+  } : {};
+
+  return React.createElement('div', {
+    className: "w-full flex flex-col items-center"
+  }, [
+    React.createElement('div', {
+      key: 'header',
+      className: "flex justify-between items-center w-full mb-6"
+    }, [
+      React.createElement('h1', {
+        key: 'title',
+        className: "text-3xl font-mono font-black text-gray-500"
+      }, "Sign In"),
+      React.createElement('button', {
+        key: 'close',
+        onClick: onClose,
+        className: "text-gray-400 hover:text-gray-600 text-3xl transition-colors"
+      }, "×")
+    ]),
+    
+    React.createElement(CardComponent, {
+      key: 'card',
+      ...cardProps,
+      className: "w-full max-w-md mx-auto bg-[#f0f3fa] rounded-3xl p-8 shadow-[20px_20px_40px_#d1d9e6,-20px_-20px_40px_#ffffff] mt-4"
+    }, React.createElement('div', {
+      className: "flex flex-col items-center"
+    }, [
+      React.createElement(AvatarPlaceholder, { key: 'avatar' }),
+
+      React.createElement('form', {
+        key: 'form',
+        onSubmit: handleSubmit,
+        className: "w-full"
+      }, [
+        React.createElement(InputField, {
+          key: 'email',
+          type: "email",
+          placeholder: "Email",
+          value: email,
+          onChange: setEmail
+        }),
+        React.createElement(InputField, {
+          key: 'password',
+          type: "password",
+          placeholder: "Password",
+          value: password,
+          onChange: setPassword,
+          showPasswordToggle: true
+        }),
+        React.createElement(LoginButton, {
+          key: 'button',
+          onClick: handleSubmit,
+          isLoading: isLoading
+        })
+      ]),
+
+      React.createElement(FooterLinks, {
+        key: 'footer',
+        onSwitchToLogin: onSwitchToSignup
+      })
+    ]))
+  ]);
+};
+
+// Signup Form Component
+const SignupForm = ({ onClose, onSwitchToLogin }) => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    if (!formData.email.includes("@")) {
+      alert("Please enter a valid email address");
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    if (formData.password.length < 8) {
+      alert("Password must be at least 8 characters");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // Get CSRF token
+      const csrftoken = getCookie('csrftoken');
+      
+      // Call Django backend API
+      const response = await fetch('/api/auth/register/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken,
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          username: formData.email,
+          email: formData.email,
+          password: formData.password,
+          confirm_password: formData.confirmPassword,
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Handle validation errors
+        if (data.username) {
+          alert('Error: ' + data.username[0]);
+        } else if (data.email) {
+          alert('Error: ' + data.email[0]);
+        } else if (data.password) {
+          alert('Error: ' + data.password[0]);
+        } else if (data.error) {
+          alert('Error: ' + data.error);
+        } else {
+          alert('Registration failed. Please try again.');
+        }
+        setIsLoading(false);
+        return;
+      }
+
+      // Success! Store user info and redirect to dashboard
+      if (data.success) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        alert("Account created successfully! Welcome to AirAware!");
+        window.location.href = data.redirect_url || '/dashboard/';
+      } else {
+        alert("Registration successful!");
+        onClose();
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert("Network error. Please make sure the server is running.");
+      setIsLoading(false);
+    }
+  };
+
+  const CardComponent = motion ? motion.div : 'div';
+  const cardProps = motion ? {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6 }
+  } : {};
+
+  return React.createElement('div', {
+    className: "w-full flex flex-col items-center"
+  }, [
+    React.createElement('div', {
+      key: 'header',
+      className: "flex justify-between items-center w-full mb-6"
+    }, [
+      React.createElement('h1', {
+        key: 'title',
+        className: "text-3xl font-mono font-black text-gray-500 mt-20"
+      }, "Sign Up"),
+      React.createElement('button', {
+        key: 'close',
+        onClick: onClose,
+        className: "text-gray-400 hover:text-gray-600 text-3xl transition-colors"
+      }, "×")
+    ]),
+    
+    React.createElement(CardComponent, {
+      key: 'card',
+      ...cardProps,
+      className: "w-full max-w-md mx-auto bg-[#f0f3fa] rounded-3xl p-8 shadow-[20px_20px_40px_#d1d9e6,-20px_-20px_40px_#ffffff] mt-4"
+    }, React.createElement('div', {
+      className: "flex flex-col items-center"
+    }, [
+      React.createElement(AvatarPlaceholder, { key: 'avatar' }),
+
+      React.createElement('form', {
+        key: 'form',
+        onSubmit: handleSubmit,
+        className: "w-full"
+      }, [
+        React.createElement('div', {
+          key: 'name-row',
+          className: "grid grid-cols-2 gap-4 mb-6"
+        }, [
+          React.createElement(InputField, {
+            key: 'firstName',
+            type: "text",
+            placeholder: "First Name",
+            value: formData.firstName,
+            onChange: (value) => handleChange('firstName', value)
+          }),
+          React.createElement(InputField, {
+            key: 'lastName',
+            type: "text",
+            placeholder: "Last Name",
+            value: formData.lastName,
+            onChange: (value) => handleChange('lastName', value)
+          })
+        ]),
+
+        React.createElement(InputField, {
+          key: 'email',
+          type: "email",
+          placeholder: "Email",
+          value: formData.email,
+          onChange: (value) => handleChange('email', value)
+        }),
+
+        React.createElement(InputField, {
+          key: 'password',
+          type: "password",
+          placeholder: "Password",
+          value: formData.password,
+          onChange: (value) => handleChange('password', value),
+          showPasswordToggle: true
+        }),
+
+        React.createElement(InputField, {
+          key: 'confirmPassword',
+          type: "password",
+          placeholder: "Confirm Password",
+          value: formData.confirmPassword,
+          onChange: (value) => handleChange('confirmPassword', value),
+          showPasswordToggle: true
+        }),
+
+        React.createElement(LoginButton, {
+          key: 'button',
+          onClick: handleSubmit,
+          isLoading: isLoading,
+          children: isLoading ? "Creating Account..." : "Create Account"
+        })
+      ]),
+
+      React.createElement('div', {
+        key: 'footer',
+        className: "flex justify-center items-center text-sm"
+      }, [
+        React.createElement('span', {
+          key: 'text',
+          className: "text-gray-500 mr-1"
+        }, "Already have an account?"),
+        React.createElement('button', {
+          key: 'switch',
+          onClick: onSwitchToLogin,
+          className: "text-gray-500 hover:text-[#ff1493] hover:underline transition-all duration-200 font-mono"
+        }, "Sign in")
+      ])
+    ]))
+  ]);
+};
+
+// Specific Signup Page Component (from authentication folder)
+const SignupPage = ({ onClose }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+      alert('Please fill in all fields');
+      return;
+    }
+    
+    if (!formData.email.includes('@')) {
+      alert('Please enter a valid email address');
+      return;
+    }
+    
+    if (formData.password !== formData.confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+    
+    if (formData.password.length < 8) {
+      alert('Password must be at least 8 characters');
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    try {
+      // Parse name into first and last
+      const names = formData.name.trim().split(' ');
+      const firstName = names.shift() || '';
+      const lastName = names.join(' ') || '';
+
+      // Get CSRF token
+      const csrftoken = getCookie('csrftoken');
+
+      // Call Django backend API
+      const response = await fetch('/api/auth/register/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken,
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          username: formData.email,
+          email: formData.email,
+          password: formData.password,
+          confirm_password: formData.confirmPassword,
+          first_name: firstName,
+          last_name: lastName,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Handle validation errors
+        if (data.username) {
+          alert('Error: ' + data.username[0]);
+        } else if (data.email) {
+          alert('Error: ' + data.email[0]);
+        } else if (data.password) {
+          alert('Error: ' + data.password[0]);
+        } else if (data.error) {
+          alert('Error: ' + data.error);
+        } else {
+          alert('Registration failed. Please try again.');
+        }
+        setIsLoading(false);
+        return;
+      }
+
+      // Success! Store user data and redirect to dashboard
+      if (data.success) {
+        localStorage.setItem('user', JSON.stringify(data.user));
+        alert('Account created successfully! Welcome to AirAware!');
+        window.location.href = data.redirect_url || '/dashboard/';
+      } else {
+        alert('Registration successful!');
+        if (onClose) onClose();
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert('Network error. Please make sure the server is running.');
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <main className="min-h-dvh flex items-center justify-center px-4 py-10">
+      <div className="signup-container">
+        {/* Close button */}
+        <div className="flex justify-end mb-6">
+          <button
+            onClick={onClose}
+            className="auth-close-btn"
+          >
+            ×
+          </button>
+        </div>
+        
+        <div className="mb-8 space-y-4 text-center">
+          <span className="auth-badge">
+            AI-Powered Environmental Intelligence
+          </span>
+          <h1 className="auth-title">
+            Join AirAware
+          </h1>
+          <p className="auth-subtitle">
+            Create your account to get real-time AQI, source attribution, and proactive health alerts.
+          </p>
+        </div>
+
+        <div className="auth-form-container p-8">
+          <form className="grid gap-6" onSubmit={handleSubmit}>
+            <div className="grid gap-3">
+              <label htmlFor="name" className="auth-label">
+                Full Name
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Aarav Sharma"
+                autoComplete="name"
+                required
+                value={formData.name}
+                onChange={(e) => handleChange('name', e.target.value)}
+                className="auth-input w-full px-4 py-3 rounded-lg focus:outline-none"
+              />
+            </div>
+
+            <div className="grid gap-3">
+              <label htmlFor="email" className="auth-label">
+                Email Address
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="you@airaware.gov.in"
+                autoComplete="email"
+                required
+                value={formData.email}
+                onChange={(e) => handleChange('email', e.target.value)}
+                className="auth-input w-full px-4 py-3 rounded-lg focus:outline-none"
+              />
+            </div>
+
+            <div className="grid gap-3">
+              <label htmlFor="password" className="auth-label">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="••••••••"
+                autoComplete="new-password"
+                required
+                minLength={8}
+                value={formData.password}
+                onChange={(e) => handleChange('password', e.target.value)}
+                className="auth-input w-full px-4 py-3 rounded-lg focus:outline-none"
+              />
+            </div>
+
+            <div className="grid gap-3">
+              <label htmlFor="confirmPassword" className="auth-label">
+                Confirm Password
+              </label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                placeholder="••••••••"
+                autoComplete="new-password"
+                required
+                minLength={8}
+                value={formData.confirmPassword}
+                onChange={(e) => handleChange('confirmPassword', e.target.value)}
+                className="auth-input w-full px-4 py-3 rounded-lg focus:outline-none"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="auth-button w-full py-3 px-4 rounded-lg font-medium"
+            >
+              {isLoading ? (
+                <>
+                  <span className="auth-loading"></span>
+                  Creating account...
+                </>
+              ) : (
+                'Create account'
+              )}
+            </button>
+
+            <p className="text-center text-sm auth-footer-text">
+              Already have an account?{' '}
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  window.showLoginPage();
+                }}
+                className="auth-link"
+              >
+                Sign in
+              </button>
+              .
+            </p>
+          </form>
+        </div>
+
+        <div className="mt-8 text-center auth-footer-text">
+          By creating an account, you agree to our{' '}
+          <button className="auth-link">
+            Terms of Service
+          </button>{' '}
+          and{' '}
+          <button className="auth-link">
+            Privacy Policy
+          </button>
+          .
+        </div>
+      </div>
+    </main>
+  );
+};
+
+// Global functions to show/hide signup page
+window.showSignupPage = () => {
+  const overlay = document.getElementById('signup-overlay');
+  const content = document.getElementById('signup-content');
+  
+  overlay.classList.add('show');
+  
+  const signupPageElement = React.createElement(SignupPage, {
+    onClose: window.hideSignupPage
+  });
+  
+  ReactDOM.render(signupPageElement, content);
+};
+
+window.hideSignupPage = () => {
+  const overlay = document.getElementById('signup-overlay');
+  const content = document.getElementById('signup-content');
+  
+  overlay.classList.remove('show');
+  if (content && ReactDOM.unmountComponentAtNode) {
+    ReactDOM.unmountComponentAtNode(content);
+  }
+};
+
+// Close signup page when clicking outside (on overlay background)
+document.getElementById('signup-overlay').addEventListener('click', (e) => {
+  if (e.target.id === 'signup-overlay') {
+    window.hideSignupPage();
+  }
+});
+
+// Specific Login Page Component (from authentication folder)
+const LoginPage = ({ onClose }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!email || !password) {
+      alert('Please fill in both fields');
+      return;
+    }
+    
+    if (!email.includes('@')) {
+      alert('Please enter a valid email address');
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    try {
+      // Get CSRF token
+      const csrftoken = getCookie('csrftoken');
+      
+      // Call Django backend API
+      const response = await fetch('/api/auth/login/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken,
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.error || 'Login failed. Please try again.');
+        setIsLoading(false);
+        return;
+      }
+
+      // Success! Store user data and redirect to dashboard
+      if (data.success) {
+        localStorage.setItem('user', JSON.stringify(data.user));
+        alert('Successfully signed in! Welcome back!');
+        window.location.href = data.redirect_url || '/dashboard/';
+      } else {
+        alert('Login successful!');
+        onClose();
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('Network error. Please make sure the server is running.');
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <main className="min-h-dvh flex items-center justify-center px-4 py-10">
+      <div className="signup-container">
+        {/* Close button */}
+        <div className="flex justify-end mb-6">
+          <button
+            onClick={onClose}
+            className="auth-close-btn"
+          >
+            ×
+          </button>
+        </div>
+        
+        <div className="mb-8 space-y-4 text-center">
+          <span className="auth-badge">
+            AI-Powered Environmental Intelligence
+          </span>
+          <h1 className="auth-title">
+            Breathe easy. Sign in
+          </h1>
+          <p className="auth-subtitle">
+            Access live air quality insights, policy analytics, and personalized health recommendations.
+          </p>
+        </div>
+
+        <div className="auth-form-container p-8">
+          <form className="grid gap-6" onSubmit={handleSubmit}>
+            <div className="grid gap-3">
+              <label htmlFor="email" className="auth-label">
+                Email Address
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="you@airaware.gov.in"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="auth-input w-full px-4 py-3 rounded-lg focus:outline-none"
+              />
+            </div>
+
+            <div className="grid gap-3">
+              <div className="flex items-center justify-between">
+                <label htmlFor="password" className="auth-label">
+                  Password
+                </label>
+                <button
+                  type="button"
+                  className="auth-link text-xs"
+                >
+                  Forgot password?
+                </button>
+              </div>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="••••••••"
+                autoComplete="current-password"
+                required
+                minLength={8}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="auth-input w-full px-4 py-3 rounded-lg focus:outline-none"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="auth-button w-full py-3 px-4 rounded-lg font-medium"
+            >
+              {isLoading ? (
+                <>
+                  <span className="auth-loading"></span>
+                  Signing in...
+                </>
+              ) : (
+                'Sign in'
+              )}
+            </button>
+
+            <p className="text-center text-sm auth-footer-text">
+              Don't have an account?{' '}
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  window.showSignupPage();
+                }}
+                className="auth-link"
+              >
+                Create one
+              </button>
+              .
+            </p>
+          </form>
+        </div>
+
+        <div className="mt-8 text-center auth-footer-text">
+          By continuing, you agree to our{' '}
+          <button className="auth-link">
+            Terms of Service
+          </button>{' '}
+          and{' '}
+          <button className="auth-link">
+            Privacy Policy
+          </button>
+          .
+        </div>
+      </div>
+    </main>
+  );
+};
+
+// Navigation functions are defined earlier in the script
+// (showLoginPage, showSignupPage, hideSignupPage)
+</script>
+
+</body></html>

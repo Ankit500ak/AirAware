@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication API Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl font-bold mb-8 text-teal-400">🧪 Authentication API Test Suite</h1>
+        
+        <!-- Test Register -->
+        <div class="bg-slate-800 rounded-lg p-6 mb-4">
+            <h2 class="text-2xl font-bold mb-4 text-green-400">Test 1: Register New User</h2>
+            <button onclick="testRegister()" class="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-semibold">
+                Run Register Test
+            </button>
+            <pre id="register-result" class="mt-4 bg-slate-900 p-4 rounded text-sm overflow-auto"></pre>
+        </div>
+
+        <!-- Test Login -->
+        <div class="bg-slate-800 rounded-lg p-6 mb-4">
+            <h2 class="text-2xl font-bold mb-4 text-blue-400">Test 2: Login User</h2>
+            <button onclick="testLogin()" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold">
+                Run Login Test
+            </button>
+            <pre id="login-result" class="mt-4 bg-slate-900 p-4 rounded text-sm overflow-auto"></pre>
+        </div>
+
+        <!-- Test Check Auth -->
+        <div class="bg-slate-800 rounded-lg p-6 mb-4">
+            <h2 class="text-2xl font-bold mb-4 text-purple-400">Test 3: Check Authentication</h2>
+            <button onclick="testCheckAuth()" class="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-semibold">
+                Run Auth Check
+            </button>
+            <pre id="check-result" class="mt-4 bg-slate-900 p-4 rounded text-sm overflow-auto"></pre>
+        </div>
+
+        <!-- Test Logout -->
+        <div class="bg-slate-800 rounded-lg p-6 mb-4">
+            <h2 class="text-2xl font-bold mb-4 text-red-400">Test 4: Logout User</h2>
+            <button onclick="testLogout()" class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg font-semibold">
+                Run Logout Test
+            </button>
+            <pre id="logout-result" class="mt-4 bg-slate-900 p-4 rounded text-sm overflow-auto"></pre>
+        </div>
+
+        <!-- Run All Tests -->
+        <div class="bg-slate-800 rounded-lg p-6 mb-4">
+            <h2 class="text-2xl font-bold mb-4 text-yellow-400">Run All Tests</h2>
+            <button onclick="runAllTests()" class="bg-yellow-600 hover:bg-yellow-700 px-6 py-3 rounded-lg font-semibold">
+                🚀 Run Full Test Suite
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // CSRF Token Helper
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Test Register
+        async function testRegister() {
+            const resultEl = document.getElementById('register-result');
+            resultEl.textContent = 'Testing...';
+            
+            try {
+                const csrftoken = getCookie('csrftoken');
+                const testData = {
+                    username: `test${Date.now()}@example.com`,
+                    email: `test${Date.now()}@example.com`,
+                    password: 'testpassword123',
+                    confirm_password: 'testpassword123',
+                    first_name: 'Test',
+                    last_name: 'User'
+                };
+
+                const response = await fetch('/api/auth/register/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify(testData)
+                });
+
+                const data = await response.json();
+                
+                resultEl.textContent = `Status: ${response.status}\n\n` + 
+                    JSON.stringify(data, null, 2);
+                resultEl.className = response.ok ? 
+                    'mt-4 bg-green-900/50 p-4 rounded text-sm overflow-auto' : 
+                    'mt-4 bg-red-900/50 p-4 rounded text-sm overflow-auto';
+            } catch (error) {
+                resultEl.textContent = `Error: ${error.message}`;
+                resultEl.className = 'mt-4 bg-red-900/50 p-4 rounded text-sm overflow-auto';
+            }
+        }
+
+        // Test Login
+        async function testLogin() {
+            const resultEl = document.getElementById('login-result');
+            resultEl.textContent = 'Testing...';
+            
+            try {
+                const csrftoken = getCookie('csrftoken');
+                const testData = {
+                    email: 'test@example.com',
+                    password: 'testpassword123'
+                };
+
+                const response = await fetch('/api/auth/login/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify(testData)
+                });
+
+                const data = await response.json();
+                
+                resultEl.textContent = `Status: ${response.status}\n\n` + 
+                    JSON.stringify(data, null, 2);
+                resultEl.className = response.ok ? 
+                    'mt-4 bg-green-900/50 p-4 rounded text-sm overflow-auto' : 
+                    'mt-4 bg-red-900/50 p-4 rounded text-sm overflow-auto';
+            } catch (error) {
+                resultEl.textContent = `Error: ${error.message}`;
+                resultEl.className = 'mt-4 bg-red-900/50 p-4 rounded text-sm overflow-auto';
+            }
+        }
+
+        // Test Check Auth
+        async function testCheckAuth() {
+            const resultEl = document.getElementById('check-result');
+            resultEl.textContent = 'Testing...';
+            
+            try {
+                const response = await fetch('/api/auth/check/', {
+                    method: 'GET',
+                    credentials: 'same-origin'
+                });
+
+                const data = await response.json();
+                
+                resultEl.textContent = `Status: ${response.status}\n\n` + 
+                    JSON.stringify(data, null, 2);
+                resultEl.className = response.ok ? 
+                    'mt-4 bg-green-900/50 p-4 rounded text-sm overflow-auto' : 
+                    'mt-4 bg-red-900/50 p-4 rounded text-sm overflow-auto';
+            } catch (error) {
+                resultEl.textContent = `Error: ${error.message}`;
+                resultEl.className = 'mt-4 bg-red-900/50 p-4 rounded text-sm overflow-auto';
+            }
+        }
+
+        // Test Logout
+        async function testLogout() {
+            const resultEl = document.getElementById('logout-result');
+            resultEl.textContent = 'Testing...';
+            
+            try {
+                const csrftoken = getCookie('csrftoken');
+
+                const response = await fetch('/api/auth/logout/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                    },
+                    credentials: 'same-origin'
+                });
+
+                const data = await response.json();
+                
+                resultEl.textContent = `Status: ${response.status}\n\n` + 
+                    JSON.stringify(data, null, 2);
+                resultEl.className = response.ok ? 
+                    'mt-4 bg-green-900/50 p-4 rounded text-sm overflow-auto' : 
+                    'mt-4 bg-red-900/50 p-4 rounded text-sm overflow-auto';
+            } catch (error) {
+                resultEl.textContent = `Error: ${error.message}`;
+                resultEl.className = 'mt-4 bg-red-900/50 p-4 rounded text-sm overflow-auto';
+            }
+        }
+
+        // Run All Tests
+        async function runAllTests() {
+            console.log('Running all tests...');
+            await testRegister();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            await testCheckAuth();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            await testLogout();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            await testLogin();
+            console.log('All tests completed!');
+        }
+    </script>
+</body>
+</html>

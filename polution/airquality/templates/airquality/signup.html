@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-blue-900/20 to-slate-900 min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-md w-full">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-2">Sign Up</h1>
+            <p class="text-slate-300">Join AirAware today</p>
+        </div>
+
+        <!-- Messages -->
+        {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+            <div class="bg-{% if message.tags == 'error' %}red{% elif message.tags == 'success' %}green{% else %}blue{% endif %}-500/20 border border-{% if message.tags == 'error' %}red{% elif message.tags == 'success' %}green{% else %}blue{% endif %}-400/30 text-white px-4 py-3 rounded-lg mb-2">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="bg-slate-800/40 backdrop-blur-sm border border-slate-700/30 rounded-2xl p-8 shadow-2xl">
+            <form method="POST" action="{% url 'airquality:signup' %}" class="space-y-4">
+                {% csrf_token %}
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="first_name" class="block text-sm font-medium text-slate-300 mb-2">First Name</label>
+                        <input 
+                            type="text" 
+                            id="first_name" 
+                            name="first_name" 
+                            required 
+                            class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                            placeholder="John"
+                        >
+                    </div>
+                    <div>
+                        <label for="last_name" class="block text-sm font-medium text-slate-300 mb-2">Last Name</label>
+                        <input 
+                            type="text" 
+                            id="last_name" 
+                            name="last_name" 
+                            required 
+                            class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                            placeholder="Doe"
+                        >
+                    </div>
+                </div>
+
+                <div>
+                    <label for="username" class="block text-sm font-medium text-slate-300 mb-2">Username</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        required 
+                        class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                        placeholder="johndoe"
+                    >
+                </div>
+
+                <div>
+                    <label for="email" class="block text-sm font-medium text-slate-300 mb-2">Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        required 
+                        class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                        placeholder="john@example.com"
+                    >
+                </div>
+
+                <div>
+                    <label for="password1" class="block text-sm font-medium text-slate-300 mb-2">Password</label>
+                    <input 
+                        type="password" 
+                        id="password1" 
+                        name="password1" 
+                        required 
+                        class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                        placeholder="Enter your password"
+                    >
+                </div>
+
+                <div>
+                    <label for="password2" class="block text-sm font-medium text-slate-300 mb-2">Confirm Password</label>
+                    <input 
+                        type="password" 
+                        id="password2" 
+                        name="password2" 
+                        required 
+                        class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                        placeholder="Confirm your password"
+                    >
+                </div>
+
+                <button 
+                    type="submit" 
+                    class="w-full bg-gradient-to-r from-teal-500 to-emerald-500 text-white font-semibold py-3 px-4 rounded-lg hover:from-teal-600 hover:to-emerald-600 transition-all duration-300 shadow-lg hover:shadow-teal-500/50"
+                >
+                    Create Account
+                </button>
+
+                <div class="text-center text-sm text-slate-400">
+                    Already have an account? 
+                    <a href="{% url 'airquality:login' %}" class="text-teal-400 hover:text-teal-300 transition-colors">Sign In</a>
+                </div>
+
+                <div class="text-center">
+                    <a href="{% url 'airquality:index' %}" class="text-slate-400 hover:text-slate-300 text-sm transition-colors">
+                        ← Back to Home
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <div class="mt-6 text-center text-xs text-slate-500">
+            By creating an account, you agree to our 
+            <a href="#" class="text-teal-400 hover:text-teal-300">Terms of Service</a> 
+            and 
+            <a href="#" class="text-teal-400 hover:text-teal-300">Privacy Policy</a>
+        </div>
+    </div>
+</body>
+</html>

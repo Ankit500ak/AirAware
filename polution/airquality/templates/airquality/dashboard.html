@@ -1,0 +1,449 @@
+﻿<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Air Aware - Air Quality Monitoring Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body { font-family: 'Inter', sans-serif; }
+  .scrollbar::-webkit-scrollbar { width: 6px; }
+  .scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 3px; }
+</style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=IBM+Plex+Serif:wght@300;400;500;600;700&amp;family=IBM+Plex+Mono:wght@300;400;500;600;700&amp;family=Inter&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=IBM+Plex+Serif:wght@300;400;500;600;700&amp;family=IBM+Plex+Mono:wght@300;400;500;600;700&amp;family=Inter&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=IBM+Plex+Serif:wght@300;400;500;600;700&amp;family=IBM+Plex+Mono:wght@300;400;500;600;700&amp;family=Inter&amp;display=swap" rel="stylesheet">
+</head>
+<body class="bg-zinc-900 text-zinc-100 scrollbar">
+<!-- Wrapper -->
+<div class="min-h-screen flex flex-col lg:flex-row">
+  <!-- Sidebar -->
+  <aside class="bg-zinc-950 border-r border-zinc-800 lg:w-64 w-full lg:h-auto h-16 px-6 py-4 flex lg:flex-col items-center lg:items-stretch gap-6">
+    <!-- Logo & Collapse -->
+    <div class="flex items-center justify-between w-full">
+      <div class="flex items-center gap-2 text-2xl font-semibold tracking-tight text-orange-400">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="wind" class="lucide lucide-wind w-[24px] h-[24px]" style="color: rgb(251, 146, 60);"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"></path><path d="M9.6 4.6A2 2 0 1 1 11 8H2"></path><path d="M12.6 19.4A2 2 0 1 0 14 16H2"></path></svg>
+        <span class="hidden lg:inline font-normal tracking-tight">Air Aware</span>
+      </div>
+      <button class="lg:hidden" id="mobileMenuBtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="menu" class="lucide lucide-menu w-6 h-6 text-zinc-400"><path d="M4 12h16"></path><path d="M4 18h16"></path><path d="M4 6h16"></path></svg></button>
+    </div>
+    <!-- Nav -->
+    <nav id="mobileMenu" class="lg:flex flex-col gap-2 hidden lg:block w-full flex-1">
+      <span class="uppercase text-xs font-medium text-zinc-500 mt-4 lg:mt-0 tracking-wide">Delhi NCR Monitoring</span>
+      <a href="#" class="flex items-center gap-3 py-2.5 px-3 rounded-lg text-sm font-medium bg-orange-950 text-orange-400 border border-orange-800">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="home" class="lucide lucide-home w-4 h-4"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg> Dashboard
+      </a>
+      <a href="#" class="flex items-center gap-3 py-2.5 px-3 rounded-lg text-sm font-medium hover:bg-zinc-800 text-zinc-300">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="map-pin" class="lucide lucide-map-pin w-4 h-4"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg> Locations
+        <span class="ml-auto text-[10px] font-medium bg-zinc-100 text-zinc-900 rounded-full py-0.5 px-2">15</span>
+      </a>
+      <a href="#" class="flex items-center gap-3 py-2.5 px-3 rounded-lg text-sm font-medium hover:bg-zinc-800 text-zinc-300">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="activity" class="lucide lucide-activity w-4 h-4"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg> Live AQI
+      </a>
+      <a href="#" class="flex items-center gap-3 py-2.5 px-3 rounded-lg text-sm font-medium hover:bg-zinc-800 text-zinc-300">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="bar-chart" class="lucide lucide-bar-chart w-4 h-4"><line x1="12" x2="12" y1="20" y2="10"></line><line x1="18" x2="18" y1="20" y2="4"></line><line x1="6" x2="6" y1="20" y2="16"></line></svg> Analytics
+      </a>
+      <a href="#" class="flex items-center gap-3 py-2.5 px-3 rounded-lg text-sm font-medium hover:bg-zinc-800 text-zinc-300">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="bell" class="lucide lucide-bell w-4 h-4"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg> Alerts
+      </a>
+      <a href="#" class="flex items-center gap-3 py-2.5 px-3 rounded-lg text-sm font-medium hover:bg-zinc-800 text-zinc-300">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="cloud" class="lucide lucide-cloud w-4 h-4"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg> Weather
+      </a>
+      <span class="uppercase text-xs font-medium text-zinc-500 mt-6 tracking-wide">Account</span>
+      <a href="#" class="flex items-center gap-3 py-2.5 px-3 rounded-lg text-sm font-medium hover:bg-zinc-800 text-zinc-300">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sliders" class="lucide lucide-sliders w-4 h-4"><line x1="4" x2="4" y1="21" y2="14"></line><line x1="4" x2="4" y1="10" y2="3"></line><line x1="12" x2="12" y1="21" y2="12"></line><line x1="12" x2="12" y1="8" y2="3"></line><line x1="20" x2="20" y1="21" y2="16"></line><line x1="20" x2="20" y1="12" y2="3"></line><line x1="2" x2="6" y1="14" y2="14"></line><line x1="10" x2="14" y1="8" y2="8"></line><line x1="18" x2="22" y1="16" y2="16"></line></svg> Preferences
+      </a>
+      <a href="#" class="flex items-center gap-3 py-2.5 px-3 rounded-lg text-sm font-medium hover:bg-zinc-800 text-zinc-300">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="help-circle" class="lucide lucide-help-circle w-4 h-4"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path></svg> Support
+      </a>
+      <a href="#" class="flex items-center gap-3 py-2.5 px-3 rounded-lg text-sm font-medium hover:bg-zinc-800 text-zinc-300">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="log-out" class="lucide lucide-log-out w-4 h-4"><path d="m16 17 5-5-5-5"></path><path d="M21 12H9"></path><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path></svg> Sign Out
+      </a>
+      
+      <!-- Current AQI Widget -->
+      <div class="mt-auto bg-gradient-to-br from-orange-600 to-red-700 text-white rounded-xl p-4">
+        <h3 class="font-medium mb-3">Current AQI - Delhi</h3>
+        <div class="flex items-center justify-between mb-4">
+          <div id="aqiValue" class="text-3xl font-bold font-mono">187</div>
+          <span class="text-xs bg-red-900 text-red-100 px-2 py-1 rounded-full">Moderate</span>
+        </div>
+        <div class="flex gap-2">
+          <button class="flex-1 bg-white bg-opacity-20 hover:bg-opacity-30 p-2 rounded-lg flex items-center justify-center gap-1 text-xs font-medium transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="refresh-cw" class="lucide lucide-refresh-cw w-3 h-3"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M3 21v-5h5"></path></svg> Refresh
+          </button>
+          <button class="flex-1 bg-white bg-opacity-20 hover:bg-opacity-30 p-2 rounded-lg flex items-center justify-center gap-1 text-xs font-medium transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="map" class="lucide lucide-map w-3 h-3"><path d="m3 11 18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg> Map
+          </button>
+        </div>
+      </div>
+      
+      <!-- Info Card -->
+      <div class="mt-4 bg-gradient-to-br from-green-600 to-teal-700 rounded-xl p-4 text-white">
+        <div class="flex items-center gap-2 mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="info" class="lucide lucide-info w-5 h-5"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+          <span class="font-medium">Stay Healthy</span>
+        </div>
+        <p class="text-xs text-green-100 mb-4">Get real-time air quality updates for Delhi NCR region</p>
+        <button class="w-full text-xs bg-white text-green-700 font-medium rounded-lg px-4 py-2">Learn More</button>
+      </div>
+    </nav>
+  </aside>
+  
+  <!-- Main -->
+  <main class="flex-1 p-4 lg:p-8 overflow-y-auto">
+    <!-- Topbar -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <!-- Search -->
+      <div class="flex-1 max-w-md relative">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="search" class="lucide lucide-search w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
+        <input type="text" placeholder="Search projects, tasks..." class="w-full pl-10 pr-20 py-2.5 rounded-lg border border-zinc-700 bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-zinc-100 placeholder-zinc-400">
+        <div class="absolute right-3 top-1/2 -translate-y-1/2">
+          <span class="hidden md:inline text-xs font-medium text-zinc-500 bg-zinc-700 rounded px-2 py-1">⌘K</span>
+        </div>
+      </div>
+      <!-- Icons & Profile -->
+      <div class="flex items-center gap-3">
+        <button class="relative p-2 rounded-lg hover:bg-zinc-800 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="message-square" class="lucide lucide-message-square w-5 h-5 text-zinc-400"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        </button>
+        <button class="relative p-2 rounded-lg hover:bg-zinc-800 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="bell" class="lucide lucide-bell w-5 h-5 text-zinc-400"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
+        </button>
+        <div class="flex items-center gap-3 pl-3 border-l border-zinc-700">
+          <img src="https://images.unsplash.com/photo-1511929825537-516974a253df?w=1080&amp;q=80" alt="avatar" class="w-9 h-9 object-cover rounded-full">
+          <div class="hidden md:block">
+            <p class="text-sm font-medium leading-none text-zinc-100">Sarah Chen</p>
+            <span class="text-xs text-zinc-400">sarah@nexus.app</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Heading -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-semibold tracking-tight text-zinc-100">Air Quality Dashboard</h1>
+      <p class="text-zinc-400 mt-2">Real-time air quality monitoring for Delhi NCR region</p>
+    </div>
+    
+    <!-- Controls -->
+    <div class="flex flex-wrap gap-3 mb-8">
+      <button class="flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg px-4 py-2.5 text-sm font-medium transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus" class="lucide lucide-plus w-4 h-4"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg> Add Station
+      </button>
+      <button class="border border-zinc-700 hover:bg-zinc-800 text-zinc-300 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors">Import Data</button>
+      <button class="border border-zinc-700 hover:bg-zinc-800 text-zinc-300 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors">Export Report</button>
+    </div>
+    
+    <!-- Stats Grid -->
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+      <!-- Card -->
+      <div class="relative overflow-hidden text-white bg-[url(https://images.unsplash.com/photo-1638072536413-61c5c62b652e?w=1080&amp;q=80)] bg-cover rounded-xl pt-6 pr-6 pb-6 pl-6">
+        <div class="flex items-center justify-between mb-4">
+          <p class="text-sm font-medium text-orange-100">Active Stations</p>
+          <div class="p-2 bg-white bg-opacity-20 rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="radio" class="lucide lucide-radio w-4 h-4"><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path><circle cx="12" cy="12" r="10"></circle></svg>
+          </div>
+        </div>
+        <h2 class="text-3xl font-semibold mb-2">25</h2>
+        <span class="text-xs text-orange-100 flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trending-up" class="lucide lucide-trending-up w-3 h-3"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg> +3 new this month
+        </span>
+      </div>
+      
+      <!-- Card -->
+      <div class="bg-zinc-800 bg-[url(https://images.unsplash.com/photo-1719432268911-f3ef8b7bd5ec?w=1080&amp;q=80)] bg-cover border-zinc-700 border rounded-xl pt-6 pr-6 pb-6 pl-6">
+        <div class="flex items-center justify-between mb-4">
+          <p class="text-sm font-medium text-zinc-400">Good Air Quality</p>
+          <div class="p-2 bg-green-900 rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle" class="lucide lucide-check-circle w-4 h-4 text-green-400"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg>
+          </div>
+        </div>
+        <h2 class="text-3xl font-semibold mb-2 text-zinc-100">8</h2>
+        <span class="text-xs text-green-400 flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trending-up" class="lucide lucide-trending-up w-3 h-3"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg> +2 areas improved
+        </span>
+      </div>
+      
+      <!-- Card -->
+      <div class="bg-zinc-800 bg-[url(https://images.unsplash.com/photo-1637825891028-564f672aa42c?w=1080&amp;q=80)] bg-cover border-zinc-700 border rounded-xl pt-6 pr-6 pb-6 pl-6">
+        <div class="flex items-center justify-between mb-4">
+          <p class="text-sm font-medium text-zinc-400">Moderate AQI</p>
+          <div class="p-2 bg-amber-900 rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="alert-triangle" class="lucide lucide-alert-triangle w-4 h-4 text-amber-400"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+          </div>
+        </div>
+        <h2 class="text-3xl font-semibold mb-2 text-zinc-100">12</h2>
+        <span class="text-xs text-amber-400 flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trending-up" class="lucide lucide-trending-up w-3 h-3"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg> needs monitoring
+        </span>
+      </div>
+      
+      <!-- Card -->
+      <div class="bg-zinc-800 bg-[url(https://images.unsplash.com/photo-1678581231067-644dddeca6dc?w=1080&amp;q=80)] bg-cover border-zinc-700 border rounded-xl pt-6 pr-6 pb-6 pl-6">
+        <div class="flex items-center justify-between mb-4">
+          <p class="text-sm font-medium text-zinc-400">Poor AQI</p>
+          <div class="p-2 bg-red-900 rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="alert-circle" class="lucide lucide-alert-circle w-4 h-4 text-red-400"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
+          </div>
+        </div>
+        <h2 class="text-3xl font-semibold mb-2 text-zinc-100">5</h2>
+        <span class="text-xs text-red-400">Health advisory issued</span>
+      </div>
+    </div>
+    
+    <!-- Analytics & Side Widgets -->
+    <div class="grid gap-6 lg:grid-cols-3 mb-8">
+      <!-- Analytics -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Air Quality Analytics -->
+        <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="font-semibold text-zinc-100">Weekly AQI Trends</h3>
+            <select class="text-sm border border-zinc-700 bg-zinc-800 text-zinc-300 rounded-lg px-3 py-1.5">
+              <option>This Week</option>
+              <option>Last Week</option>
+              <option>This Month</option>
+            </select>
+          </div>
+          <div class="flex justify-between items-end h-48 gap-4">
+            <div class="flex flex-col items-center gap-2 flex-1">
+              <div class="w-full h-20 rounded-t-lg bg-zinc-700 relative"></div>
+              <span class="text-xs text-zinc-500">Mon</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 flex-1">
+              <div class="w-full h-32 rounded-t-lg bg-orange-500 relative">
+                <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-medium text-zinc-300">165</span>
+              </div>
+              <span class="text-xs text-zinc-500">Tue</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 flex-1">
+              <div class="w-full h-40 rounded-t-lg bg-orange-600"></div>
+              <span class="text-xs text-zinc-500">Wed</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 flex-1">
+              <div class="w-full h-36 rounded-t-lg bg-orange-700"></div>
+              <span class="text-xs text-zinc-500">Thu</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 flex-1">
+              <div class="w-full h-28 rounded-t-lg bg-orange-400"></div>
+              <span class="text-xs text-zinc-500">Fri</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 flex-1">
+              <div class="w-full h-16 rounded-t-lg bg-zinc-600"></div>
+              <span class="text-xs text-zinc-500">Sat</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 flex-1">
+              <div class="w-full h-24 rounded-t-lg bg-zinc-600"></div>
+              <span class="text-xs text-zinc-500">Sun</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Station Activity -->
+        <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="font-semibold text-zinc-100">Station Updates</h3>
+            <button class="flex items-center gap-1 border border-zinc-700 text-zinc-300 rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-zinc-700">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus" class="lucide lucide-plus w-3 h-3"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg> Add Station
+            </button>
+          </div>
+          <div class="space-y-4">
+            <!-- Station -->
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 bg-green-900 rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="map-pin" class="lucide lucide-map-pin w-4 h-4 text-green-400"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-zinc-100">Connaught Place</p>
+                <span class="text-xs text-zinc-400 truncate">AQI: 95 - Good air quality detected</span>
+              </div>
+              <span class="text-xs bg-green-900 text-green-400 font-medium px-2 py-1 rounded-full">Good</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 bg-orange-900 rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="map-pin" class="lucide lucide-map-pin w-4 h-4 text-orange-400"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-zinc-100">Anand Vihar</p>
+                <span class="text-xs text-zinc-400 truncate">AQI: 187 - Moderate pollution levels</span>
+              </div>
+              <span class="text-xs bg-orange-900 text-orange-400 font-medium px-2 py-1 rounded-full">Moderate</span>
+            </div>
+            <div class="flex gap-4 items-center">
+              <div class="w-10 h-10 bg-red-900 rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="map-pin" class="lucide lucide-map-pin w-4 h-4 text-red-400"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-zinc-100">Rohini</p>
+                <span class="text-xs text-zinc-400 truncate">AQI: 312 - Hazardous air quality alert</span>
+              </div>
+              <span class="text-xs bg-red-900 text-red-400 font-medium px-2 py-1 rounded-full">Poor</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 bg-green-900 rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="map-pin" class="lucide lucide-map-pin w-4 h-4 text-green-400"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-zinc-100">Lodhi Road</p>
+                <span class="text-xs text-zinc-400 truncate">AQI: 78 - Air quality improved significantly</span>
+              </div>
+              <span class="text-xs bg-green-900 text-green-400 font-medium px-2 py-1 rounded-full">Good</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Right Column -->
+      <div class="space-y-6">
+        <!-- ML Model Updates -->
+        <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+          <h3 class="font-semibold text-zinc-100 mb-4">ML Model Status</h3>
+          <div class="space-y-4">
+            <div class="p-3 bg-green-950 rounded-lg border border-green-800">
+              <p class="text-sm font-medium text-zinc-100 mb-1">Prediction Model Updated</p>
+              <span class="text-xs text-zinc-400">Last updated • 2:15 PM - Accuracy: 94.7%</span>
+              <div class="flex items-center gap-2 mt-2">
+                <button class="flex items-center gap-1 bg-green-600 hover:bg-green-700 text-white rounded-md px-3 py-1.5 text-xs font-medium">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="brain" class="lucide lucide-brain w-3 h-3"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"></path><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"></path><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path><path d="M3.477 10.896a4 4 0 0 1 .585-.396"></path><path d="M19.938 10.5a4 4 0 0 1 .585.396"></path><path d="M6 18a4 4 0 0 1-1.967-.516"></path><path d="M19.967 17.484A4 4 0 0 1 18 18"></path></svg> View Details
+                </button>
+              </div>
+            </div>
+            <div class="p-3 bg-orange-950 rounded-lg border border-orange-800">
+              <p class="text-sm font-medium text-zinc-100 mb-1">Next Data Processing</p>
+              <span class="text-xs text-zinc-400">Scheduled • Tomorrow 6:00 AM</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Recent Reports -->
+        <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="font-semibold text-zinc-100">Recent Reports</h3>
+            <button class="flex items-center gap-1 border border-zinc-700 text-zinc-300 rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-zinc-700">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus" class="lucide lucide-plus w-3 h-3"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg> Generate
+            </button>
+          </div>
+          <ul class="space-y-4">
+            <li class="flex gap-3">
+              <div class="p-2 bg-red-900 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="file-text" class="lucide lucide-file-text w-4 h-4 text-red-400"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-zinc-100">Daily AQI Summary</p>
+                <span class="text-xs text-zinc-400">Generated Oct 8, 2025</span>
+              </div>
+            </li>
+            <li class="flex gap-3">
+              <div class="p-2 bg-green-900 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="bar-chart" class="lucide lucide-bar-chart w-4 h-4 text-green-400"><line x1="12" x2="12" y1="20" y2="10"></line><line x1="18" x2="18" y1="20" y2="4"></line><line x1="6" x2="6" y1="20" y2="16"></line></svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-zinc-100">Weekly Trend Analysis</p>
+                <span class="text-xs text-zinc-400">Generated Oct 7, 2025</span>
+              </div>
+            </li>
+            <li class="flex gap-3">
+              <div class="p-2 bg-orange-900 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="alert-triangle" class="lucide lucide-alert-triangle w-4 h-4 text-orange-400"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-zinc-100">Pollution Alert Report</p>
+                <span class="text-xs text-zinc-400">Generated Oct 6, 2025</span>
+              </div>
+            </li>
+            <li class="flex gap-3">
+              <div class="p-2 bg-blue-900 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="cloud" class="lucide lucide-cloud w-4 h-4 text-blue-400"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-zinc-100">Weather Impact Study</p>
+                <span class="text-xs text-zinc-400">Generated Oct 5, 2025</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Project Progress -->
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+        <h3 class="font-semibold text-zinc-100 mb-6">Delhi NCR Coverage</h3>
+        <div class="flex items-center gap-8">
+          <div class="relative">
+            <div class="w-32 h-32 rounded-full bg-zinc-700"></div>
+            <div class="absolute inset-0 rounded-full" style="background: conic-gradient(#16a34a 0% 32%, #f97316 32% 80%, #dc2626 80% 100%);"></div>
+            <div class="absolute inset-3 bg-zinc-800 rounded-full flex items-center justify-center">
+              <span class="text-xl font-semibold text-zinc-100">25</span>
+            </div>
+          </div>
+          <ul class="space-y-3 text-sm">
+            <li class="flex items-center gap-3">
+              <span class="w-3 h-3 bg-green-500 rounded-full"></span> 
+              <span class="text-zinc-300">Good Air Quality</span>
+              <span class="ml-auto font-medium text-zinc-100">8</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <span class="w-3 h-3 bg-orange-500 rounded-full"></span> 
+              <span class="text-zinc-300">Moderate</span>
+              <span class="ml-auto font-medium text-zinc-100">12</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <span class="w-3 h-3 bg-red-600 rounded-full"></span> 
+              <span class="text-zinc-300">Poor/Hazardous</span>
+              <span class="ml-auto font-medium text-zinc-100">5</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+        <h3 class="font-semibold text-zinc-100 mb-6">Quick Actions</h3>
+        <div class="grid grid-cols-2 gap-3">
+          <button class="flex flex-col items-center gap-2 p-4 border border-zinc-700 rounded-lg hover:bg-zinc-700 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="map-pin" class="lucide lucide-map-pin w-6 h-6 text-orange-400"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span class="text-sm font-medium text-zinc-300">Add Station</span>
+          </button>
+          <button class="flex flex-col items-center gap-2 p-4 border border-zinc-700 rounded-lg hover:bg-zinc-700 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="bell" class="lucide lucide-bell w-6 h-6 text-green-400"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg>
+            <span class="text-sm font-medium text-zinc-300">Set Alert</span>
+          </button>
+          <button class="flex flex-col items-center gap-2 p-4 border border-zinc-700 rounded-lg hover:bg-zinc-700 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="bar-chart" class="lucide lucide-bar-chart w-6 h-6 text-purple-400"><line x1="12" x2="12" y1="20" y2="10"></line><line x1="18" x2="18" y1="20" y2="4"></line><line x1="6" x2="6" y1="20" y2="16"></line></svg>
+            <span class="text-sm font-medium text-zinc-300">View Trends</span>
+          </button>
+          <button class="flex flex-col items-center gap-2 p-4 border border-zinc-700 rounded-lg hover:bg-zinc-700 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="download" class="lucide lucide-download w-6 h-6 text-orange-400"><path d="M12 15V3"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path></svg>
+            <span class="text-sm font-medium text-zinc-300">Export Data</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  lucide.createIcons();
+
+  // Mobile menu toggle
+  document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+    document.getElementById('mobileMenu').classList.toggle('hidden');
+  });
+
+  // Timer functionality
+  let seconds = 9252, running = true;
+  const timerEl = document.getElementById('timer');
+  function updateTimer() {
+    const h = String(Math.floor(seconds / 3600)).padStart(2,'0');
+    const m = String(Math.floor(seconds % 3600 / 60)).padStart(2,'0');
+    const s = String(seconds % 60).padStart(2,'0');
+    timerEl.textContent = `${h}:${m}:${s}`;
+  }
+  updateTimer();
+  let interval = setInterval(() => { if(running){ seconds++; updateTimer(); } }, 1000);
+  document.getElementById('pauseBtn').addEventListener('click', () => { running = !running; });
+  document.getElementById('stopBtn').addEventListener('click', () => { running = false; seconds = 0; updateTimer(); });
+</script>
+
+</body></html>
