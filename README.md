@@ -30,36 +30,464 @@ AirAware is a comprehensive air quality management platform that combines real-t
 - **🏛️ Policy Integration** - Government-grade compliance and reporting tools
 - **📱 Multi-platform Access** - Web, mobile, and API interfaces
 
-## 🏗️ Architecture
+## 🏗️ Project Architecture
+
+### High-Level Architecture
 
 ```mermaid
 graph TB
-    A[Frontend - React/HTML] --> B[Django Backend]
-    B --> C[SQLite Database]
-    B --> D[External APIs]
-    B --> E[AI/ML Models]
-    F[Authentication System] --> B
-    G[Real-time Dashboard] --> A
+    subgraph "Client Layer"
+        A[Web Browser] 
+        B[Mobile App]
+        C[API Clients]
+    end
+    
+    subgraph "Frontend Layer"
+        D[React Dashboard]
+        E[HTML Templates]
+        F[TailwindCSS Styling]
+        G[Authentication UI]
+    end
+    
+    subgraph "Backend Layer"
+        H[Django Web Framework]
+        I[Django REST Framework]
+        J[Authentication System]
+        K[Business Logic]
+    end
+    
+    subgraph "Data Layer"
+        L[SQLite Database]
+        M[Static Files]
+        N[Media Storage]
+        O[Cache Layer]
+    end
+    
+    subgraph "External Services"
+        P[Weather APIs]
+        Q[Air Quality APIs]
+        R[EmailJS Service]
+        S[Government Data Sources]
+    end
+    
+    subgraph "AI/ML Layer"
+        T[Prediction Models]
+        U[Health Algorithms]
+        V[Route Optimization]
+        W[Data Analysis]
+    end
+    
+    A --> D
+    B --> I
+    C --> I
+    D --> H
+    E --> H
+    G --> J
+    H --> L
+    H --> P
+    H --> Q
+    I --> T
+    K --> U
+    H --> R
+    J --> L
+    T --> W
 ```
 
-### Technology Stack
+### Detailed System Architecture
 
-**Backend:**
-- **Django 5.2** - Web framework
-- **Django REST Framework** - API development
-- **SQLite** - Database (production ready for PostgreSQL)
-- **Python 3.9+** - Core language
+#### 1. **Frontend Architecture**
 
-**Frontend:**
-- **React 18** - Interactive components
-- **TailwindCSS** - Modern styling
-- **Lucide Icons** - Beautiful iconography
-- **HTML5/CSS3** - Base templates
+```mermaid
+graph LR
+    subgraph "React Application"
+        A[App.js Router] --> B[Dashboard Component]
+        A --> C[Authentication Pages]
+        A --> D[Static Pages]
+        
+        B --> E[AQI Display]
+        B --> F[Weather Widget]
+        B --> G[Health Recommendations]
+        B --> H[User Profile]
+        
+        C --> I[Login Form]
+        C --> J[Signup Form]
+        C --> K[Password Reset]
+        
+        D --> L[Home Page]
+        D --> M[About Page]
+        D --> N[Contact Page]
+    end
+    
+    subgraph "UI Components"
+        O[Button Component]
+        P[Card Component]
+        Q[Badge Component]
+        R[Input Component]
+        S[Label Component]
+    end
+    
+    E --> O
+    F --> P
+    G --> Q
+    I --> R
+    J --> S
+```
 
-**Infrastructure:**
-- **EmailJS** - Contact form integration
-- **External APIs** - Weather & pollution data
-- **Local Storage** - Session management
+#### 2. **Backend Architecture**
+
+```mermaid
+graph TD
+    subgraph "Django Project Structure"
+        A[pollution_project/] --> B[settings.py]
+        A --> C[urls.py]
+        A --> D[wsgi.py]
+        
+        E[airquality/] --> F[models.py]
+        E --> G[views.py]
+        E --> H[serializers.py]
+        E --> I[urls.py]
+        E --> J[admin.py]
+        
+        K[templates/] --> L[base.html]
+        K --> M[index.html]
+        K --> N[dashboard.html]
+        K --> O[login.html]
+        
+        P[static/] --> Q[CSS Files]
+        P --> R[JS Files]
+        P --> S[Images]
+    end
+```
+
+#### 3. **Database Schema**
+
+```mermaid
+erDiagram
+    User {
+        int id PK
+        string username
+        string email
+        string password_hash
+        datetime date_joined
+        boolean is_active
+        string location
+        json health_conditions
+    }
+    
+    AirQualityReading {
+        int id PK
+        string location
+        int aqi_value
+        float pm25
+        float pm10
+        float no2
+        float so2
+        float co
+        float o3
+        float temperature
+        float humidity
+        float wind_speed
+        float visibility
+        datetime timestamp
+        string data_source
+    }
+    
+    HealthRecommendation {
+        int id PK
+        string aqi_range
+        text recommendation
+        string severity_level
+        string icon_class
+        string activity_type
+        json target_conditions
+        datetime created_at
+    }
+    
+    UserSession {
+        int id PK
+        int user_id FK
+        string session_key
+        json session_data
+        datetime created_at
+        datetime expires_at
+        string ip_address
+    }
+    
+    WeatherData {
+        int id PK
+        string location
+        float temperature
+        float humidity
+        float pressure
+        float wind_speed
+        string wind_direction
+        string description
+        datetime timestamp
+    }
+    
+    PredictionModel {
+        int id PK
+        string model_name
+        string model_type
+        json parameters
+        float accuracy_score
+        datetime trained_at
+        boolean is_active
+    }
+    
+    User ||--o{ UserSession : has
+    AirQualityReading ||--o{ HealthRecommendation : triggers
+    WeatherData ||--|| AirQualityReading : correlates
+    PredictionModel ||--o{ AirQualityReading : predicts
+```
+
+### Technology Stack Deep Dive
+
+#### **Backend Technologies**
+
+| Component | Technology | Version | Purpose |
+|-----------|------------|---------|---------|
+| **Web Framework** | Django | 5.2 | Core backend framework |
+| **API Framework** | Django REST Framework | Latest | RESTful API development |
+| **Database** | SQLite | Built-in | Development database |
+| **Production DB** | PostgreSQL | 13+ | Production database |
+| **Authentication** | Django Auth | Built-in | User management |
+| **CORS Handling** | django-cors-headers | Latest | Cross-origin requests |
+| **API Documentation** | DRF Spectacular | Latest | Auto-generated docs |
+| **Caching** | Redis | 6+ | Performance optimization |
+
+#### **Frontend Technologies**
+
+| Component | Technology | Version | Purpose |
+|-----------|------------|---------|---------|
+| **UI Library** | React | 18+ | Interactive components |
+| **Routing** | React Router | 6+ | Client-side navigation |
+| **Styling** | TailwindCSS | 3+ | Utility-first CSS |
+| **Icons** | Lucide React | Latest | Beautiful icons |
+| **State Management** | React Hooks | Built-in | Component state |
+| **HTTP Client** | Fetch API | Native | API communication |
+| **Build Tool** | Create React App | Latest | Development environment |
+
+#### **Infrastructure & DevOps**
+
+| Component | Technology | Purpose |
+|-----------|------------|---------|
+| **Version Control** | Git | Source code management |
+| **Repository** | GitHub | Code hosting & collaboration |
+| **Development Server** | Django Dev Server | Local development |
+| **Production Server** | Gunicorn + Nginx | Production deployment |
+| **Process Management** | Supervisor | Service management |
+| **Monitoring** | Django Logging | Error tracking |
+| **Email Service** | EmailJS | Contact form handling |
+
+### Data Flow Architecture
+
+#### 1. **User Authentication Flow**
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant F as Frontend
+    participant B as Backend
+    participant D as Database
+    
+    U->>F: Enter credentials
+    F->>B: POST /api/auth/login/
+    B->>D: Validate user
+    D-->>B: User data
+    B-->>F: JWT token + user info
+    F->>F: Store in localStorage
+    F-->>U: Redirect to dashboard
+    
+    Note over F,B: Subsequent requests include auth token
+    F->>B: GET /api/dashboard/ (with token)
+    B->>B: Verify token
+    B-->>F: Dashboard data
+```
+
+#### 2. **Real-time Data Update Flow**
+
+```mermaid
+sequenceDiagram
+    participant D as Dashboard
+    participant API as Backend API
+    participant DB as Database
+    participant EXT as External APIs
+    
+    D->>API: GET /api/air-quality/latest/
+    API->>DB: Query latest readings
+    
+    alt Data is fresh (< 15 mins)
+        DB-->>API: Return cached data
+    else Data is stale
+        API->>EXT: Fetch fresh data
+        EXT-->>API: New AQI data
+        API->>DB: Update database
+        DB-->>API: Return new data
+    end
+    
+    API-->>D: AQI data + recommendations
+    D->>D: Update UI components
+    
+    Note over D: Auto-refresh every 30 seconds
+    loop Every 30 seconds
+        D->>API: Refresh data request
+    end
+```
+
+#### 3. **Health Recommendation Engine**
+
+```mermaid
+graph TD
+    A[Current AQI Data] --> B[Health Engine]
+    C[User Health Profile] --> B
+    D[Weather Conditions] --> B
+    E[Time of Day] --> B
+    
+    B --> F{AQI Level Analysis}
+    
+    F -->|Good 0-50| G[Outdoor Activities OK]
+    F -->|Moderate 51-100| H[Sensitive Groups Caution]
+    F -->|Unhealthy 101-150| I[Reduce Outdoor Activities]
+    F -->|Very Unhealthy 151-200| J[Avoid Outdoor Activities]
+    F -->|Hazardous 201+| K[Stay Indoors]
+    
+    G --> L[Generate Recommendations]
+    H --> L
+    I --> L
+    J --> L
+    K --> L
+    
+    L --> M[Display to User]
+```
+
+### API Architecture
+
+#### **RESTful Endpoint Structure**
+
+```
+/api/v1/
+├── auth/
+│   ├── login/          POST   - User authentication
+│   ├── logout/         POST   - User logout
+│   ├── register/       POST   - User registration
+│   └── profile/        GET    - User profile data
+│
+├── air-quality/
+│   ├── /               GET    - List all readings
+│   ├── /               POST   - Create new reading
+│   ├── /{id}/          GET    - Specific reading
+│   ├── /latest/        GET    - Most recent data
+│   └── /location/{loc}/ GET   - Location-specific data
+│
+├── weather/
+│   ├── /               GET    - Weather data
+│   └── /forecast/      GET    - Weather forecast
+│
+├── health/
+│   ├── recommendations/ GET   - Health recommendations
+│   └── alerts/         GET    - Health alerts
+│
+└── dashboard/
+    ├── /               GET    - Dashboard summary
+    ├── /stats/         GET    - Statistical data
+    └── /trends/        GET    - Trend analysis
+```
+
+### Security Architecture
+
+#### **Authentication & Authorization**
+
+```mermaid
+graph TD
+    A[User Request] --> B{Authenticated?}
+    B -->|No| C[Login Required]
+    B -->|Yes| D{Valid Session?}
+    D -->|No| E[Session Expired]
+    D -->|Yes| F{Authorized?}
+    F -->|No| G[Permission Denied]
+    F -->|Yes| H[Process Request]
+    
+    C --> I[Redirect to Login]
+    E --> I
+    G --> J[Error Response]
+    H --> K[Return Data]
+```
+
+#### **Data Protection Measures**
+
+| Layer | Security Measure | Implementation |
+|-------|------------------|----------------|
+| **Transport** | HTTPS/TLS | SSL certificates |
+| **Authentication** | Session-based | Django sessions + CSRF |
+| **Authorization** | Permission-based | Django permissions |
+| **Input Validation** | Sanitization | Django forms + DRF serializers |
+| **Database** | SQL Injection Prevention | ORM + parameterized queries |
+| **CORS** | Cross-Origin Control | django-cors-headers |
+| **Rate Limiting** | API Protection | Custom middleware |
+
+### Deployment Architecture
+
+#### **Development Environment**
+
+```mermaid
+graph LR
+    A[Developer Machine] --> B[Git Repository]
+    A --> C[Local Django Server :8000]
+    A --> D[Local React Server :3000]
+    C --> E[SQLite Database]
+    D --> C
+```
+
+#### **Production Environment**
+
+```mermaid
+graph TD
+    A[Load Balancer] --> B[Nginx Reverse Proxy]
+    B --> C[Gunicorn Application Server]
+    C --> D[Django Application]
+    D --> E[PostgreSQL Database]
+    D --> F[Redis Cache]
+    
+    G[Static Files] --> H[CDN/S3]
+    I[Media Files] --> H
+    
+    J[Monitoring] --> K[Log Aggregation]
+    L[Backup System] --> E
+```
+
+### Performance Architecture
+
+#### **Caching Strategy**
+
+```mermaid
+graph TD
+    A[User Request] --> B[Nginx Cache]
+    B -->|Cache Hit| C[Return Cached Response]
+    B -->|Cache Miss| D[Django Application]
+    
+    D --> E[Redis Cache]
+    E -->|Cache Hit| F[Return from Redis]
+    E -->|Cache Miss| G[Database Query]
+    
+    G --> H[PostgreSQL]
+    H --> I[Update Redis Cache]
+    I --> J[Return Response]
+    J --> K[Update Nginx Cache]
+```
+
+#### **Optimization Layers**
+
+| Layer | Optimization | Technique |
+|-------|-------------|-----------|
+| **Frontend** | Bundle Optimization | Code splitting, lazy loading |
+| **API** | Response Caching | Redis, HTTP headers |
+| **Database** | Query Optimization | Indexing, connection pooling |
+| **Static Assets** | CDN Delivery | CloudFront/CloudFlare |
+| **Images** | Compression | WebP format, responsive images |
+| **Network** | Compression | Gzip, Brotli |
+
+This enhanced architecture provides a comprehensive view of the entire system, from high-level component relationships to detailed implementation specifics, security measures, and performance optimizations.
 
 ## 📦 Installation
 
