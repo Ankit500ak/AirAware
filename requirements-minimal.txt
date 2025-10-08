@@ -1,0 +1,16 @@
+# Minimal Requirements for Quick Setup
+# Install with: pip install -r requirements-minimal.txt
+
+# Django Core - Essential
+Django==5.2
+djangorestframework==3.14.0
+django-cors-headers==4.3.1
+
+# API Requests - Essential
+requests==2.31.0
+
+# Environment Variables - Essential
+python-dotenv==1.0.0
+
+# Production Server - Essential
+gunicorn==21.2.0

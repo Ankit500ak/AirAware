@@ -1,0 +1,32 @@
+# Production Requirements
+# Install with: pip install -r requirements-prod.txt
+
+# Include all base requirements
+-r requirements.txt
+
+# Production-specific packages
+psycopg2-binary==2.9.9  # PostgreSQL
+gunicorn==21.2.0
+whitenoise==6.6.0
+
+# Caching
+redis==5.0.1
+django-redis==5.4.0
+hiredis==2.2.3
+
+# Monitoring & Error Tracking
+sentry-sdk==1.39.1
+
+# Security
+django-csp==3.8  # Content Security Policy
+django-secure==1.0.2
+
+# Performance
+django-cachalot==2.6.1  # Automatic caching
+
+# Task Queue
+celery==5.3.4
+django-celery-beat==2.5.0
+
+# Static File Compression
+django-compressor==4.4

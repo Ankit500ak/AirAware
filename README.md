@@ -12,7 +12,7 @@
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-Latest-cyan.svg)](https://tailwindcss.com)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-[Live Demo](http://localhost:3000) • [Documentation](#documentation) • [API Reference](#api-endpoints) • [Contributing](#contributing)
+[Live Demo](http://localhost:3000) • [Installation Guide](INSTALLATION.md) • [API Reference](#api-endpoints) • [Contributing](#contributing)
 
 </div>
 
@@ -500,6 +500,27 @@ Node.js 16+
 Git
 ```
 
+### Requirements Files Overview
+
+The project includes multiple requirements files for different use cases:
+
+| File | Purpose | When to Use |
+|------|---------|-------------|
+| `requirements.txt` | Complete package list | Standard development and deployment |
+| `requirements-minimal.txt` | Essential packages only | Quick testing or minimal setup |
+| `requirements-dev.txt` | Development tools | Local development with testing/debugging |
+| `requirements-prod.txt` | Production optimized | Production server deployment |
+
+**Package Categories:**
+- **Core**: Django, DRF, CORS headers
+- **Database**: PostgreSQL adapter, ORM tools
+- **Authentication**: JWT, Django auth extensions
+- **API**: Request handling, documentation
+- **Caching**: Redis integration
+- **Testing**: Pytest, coverage tools
+- **Code Quality**: Linting, formatting
+- **Production**: Gunicorn, monitoring tools
+
 ### Quick Start
 
 1. **Clone the Repository**
@@ -509,13 +530,15 @@ cd AirAware
 ```
 
 2. **Backend Setup**
+
+**Option A: Minimal Installation (Quick Start)**
 ```bash
 # Create virtual environment
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-# Install dependencies
-pip install django djangorestframework django-cors-headers requests
+# Install minimal dependencies
+pip install -r requirements-minimal.txt
 
 # Setup database
 python manage.py makemigrations
@@ -526,6 +549,38 @@ python manage.py createsuperuser
 
 # Start backend server
 python manage.py runserver
+```
+
+**Option B: Full Installation (Recommended)**
+```bash
+# Create virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install all dependencies
+pip install -r requirements.txt
+
+# Setup database
+python manage.py makemigrations
+python manage.py migrate
+
+# Create superuser (optional)
+python manage.py createsuperuser
+
+# Start backend server
+python manage.py runserver
+```
+
+**Option C: Development Installation**
+```bash
+# For developers with testing and debugging tools
+pip install -r requirements-dev.txt
+```
+
+**Option D: Production Installation**
+```bash
+# For production deployment with optimization tools
+pip install -r requirements-prod.txt
 ```
 
 3. **Frontend Setup**
