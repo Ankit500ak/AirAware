@@ -1,0 +1,48 @@
+services:
+  # Django Backend API
+  - type: web
+    name: airaware-backend
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: pip install --upgrade pip setuptools wheel && pip install -r requirements-render.txt && python manage.py collectstatic --no-input && python manage.py migrate
+    startCommand: gunicorn pollution_project.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.0
+      - key: DJANGO_SETTINGS_MODULE
+        value: pollution_project.settings_production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        value: .onrender.com
+      - key: DATABASE_URL
+        fromDatabase:
+          name: airaware-db
+          property: connectionString
+    
+  # PostgreSQL Database
+  - type: pserv
+    name: airaware-db
+    plan: free
+    region: oregon
+    ipAllowList: []
+
+  # React Frontend (Static Site)
+  - type: web
+    name: airaware-frontend
+    runtime: static
+    plan: free
+    region: oregon
+    buildCommand: cd air-aware-app && npm install && npm run build
+    staticPublishPath: air-aware-app/build
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

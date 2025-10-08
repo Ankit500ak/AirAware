@@ -7,14 +7,14 @@ django-cors-headers>=4.3.0
 psycopg2-binary>=2.9.0  # PostgreSQL adapter (for production)
 
 # Authentication & Security
-PyJWT==2.8.0
-django-allauth==0.57.0
-cryptography==41.0.7
+PyJWT>=2.8.0
+django-allauth>=0.57.0
+cryptography>=42.0.0
 
 # API & Documentation
-drf-spectacular==0.27.0
-markdown==3.5.1
-django-filter==23.5
+drf-spectacular>=0.27.0
+markdown>=3.5.0
+django-filter>=23.5
 
 # Data Processing & Analysis
 pandas>=2.2.0  # Compatible with Python 3.9-3.13
@@ -22,77 +22,77 @@ numpy>=2.0.0  # Compatible with Python 3.9-3.13
 scipy>=1.13.0  # Compatible with Python 3.9-3.13
 
 # External API Requests
-requests==2.31.0
-urllib3==2.1.0
-certifi==2023.11.17
+requests>=2.31.0
+urllib3>=2.1.0
+certifi>=2023.11.0
 
 # Caching
-redis==5.0.1
-django-redis==5.4.0
-hiredis==2.2.3
+redis>=5.0.0
+django-redis>=5.4.0
+hiredis>=2.3.0
 
 # Task Queue (Optional)
-celery==5.3.4
-django-celery-beat==2.5.0
+celery>=5.3.0
+django-celery-beat>=2.5.0
 
 # Environment Variables
-python-decouple==3.8
-python-dotenv==1.0.0
+python-decouple>=3.8
+python-dotenv>=1.0.0
 
 # Date & Time
-python-dateutil==2.8.2
-pytz==2023.3.post1
+python-dateutil>=2.8.0
+pytz>=2023.3
 
 # Image Processing (if needed)
-Pillow==10.1.0
+Pillow>=10.3.0
 
 # Testing
-pytest==7.4.3
-pytest-django==4.7.0
-pytest-cov==4.1.0
-faker==20.1.0
-factory-boy==3.3.0
+pytest>=7.4.0
+pytest-django>=4.7.0
+pytest-cov>=4.1.0
+faker>=20.0.0
+factory-boy>=3.3.0
 
 # Code Quality
-flake8==6.1.0
-black==23.12.0
-isort==5.13.2
-pylint==3.0.3
+flake8>=6.1.0
+black>=23.12.0
+isort>=5.13.0
+pylint>=3.0.0
 
 # Monitoring & Logging
-sentry-sdk==1.39.1
+sentry-sdk>=1.40.0
 
 # WSGI Server (Production)
-gunicorn==21.2.0
-whitenoise==6.6.0  # Static file serving
+gunicorn>=21.2.0
+whitenoise>=6.6.0  # Static file serving
 
 # Development Tools
-django-debug-toolbar==4.2.0
-django-extensions==3.2.3
-ipython==8.18.1
+django-debug-toolbar>=4.2.0
+django-extensions>=3.2.0
+ipython>=8.18.0
 
 # Data Validation
-jsonschema==4.20.0
+jsonschema>=4.20.0
 
 # Utilities
-six==1.16.0
-idna==3.6
-charset-normalizer==3.3.2
+six>=1.16.0
+idna>=3.6
+charset-normalizer>=3.3.0
 
 # Machine Learning (Optional - for AI features)
 scikit-learn>=1.5.0
 joblib>=1.4.0
 
 # Weather & Air Quality APIs (if using specific libraries)
-pyowm==3.3.0  # OpenWeatherMap
+pyowm>=3.3.0  # OpenWeatherMap
 
 # Excel/CSV Export (Optional)
-openpyxl==3.1.2
-xlsxwriter==3.1.9
+openpyxl>=3.1.0
+xlsxwriter>=3.1.0
 
 # HTML/XML Parsing (Optional)
-beautifulsoup4==4.12.2
-lxml==4.9.4
+beautifulsoup4>=4.12.0
+lxml>=5.2.0
 
 # Timezone Support
-tzdata==2023.4
+tzdata>=2023.4

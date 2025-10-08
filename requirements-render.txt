@@ -1,0 +1,45 @@
+# Minimal Requirements for Render Deployment
+# Optimized for Python 3.13 compatibility
+
+# Django Core
+Django>=5.0,<5.3
+djangorestframework>=3.14.0
+django-cors-headers>=4.3.0
+
+# Database
+psycopg2-binary>=2.9.0
+dj-database-url>=2.1.0
+
+# Production Server
+gunicorn>=21.2.0
+whitenoise>=6.6.0
+
+# Authentication & Security
+PyJWT>=2.8.0
+cryptography>=42.0.0
+
+# External API Requests
+requests>=2.31.0
+
+# Environment Variables
+python-decouple>=3.8
+python-dotenv>=1.0.0
+
+# Date & Time
+python-dateutil>=2.8.0
+pytz>=2023.3
+tzdata>=2023.4
+
+# Data Processing (Only if needed for your app)
+pandas>=2.2.0
+numpy>=2.0.0
+
+# Monitoring
+sentry-sdk>=1.40.0
+
+# Static Files
+django-compressor>=4.5
+
+# Caching
+redis>=5.0.0
+django-redis>=5.4.0
