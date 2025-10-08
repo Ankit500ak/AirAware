@@ -6,7 +6,7 @@ services:
     plan: free
     region: oregon
     buildCommand: pip install --upgrade pip setuptools wheel && pip install -r requirements-render.txt && python manage.py collectstatic --no-input && python manage.py migrate
-    startCommand: gunicorn pollution_project.wsgi:application
+    startCommand: gunicorn --bind 0.0.0.0:$PORT pollution_project.wsgi:application
     envVars:
       - key: PYTHON_VERSION
         value: 3.13.0
